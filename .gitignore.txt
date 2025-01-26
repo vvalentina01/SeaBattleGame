@@ -1,3 +1,0 @@
-seaBattleGame/
-!Source.cpp
-*test.txt
