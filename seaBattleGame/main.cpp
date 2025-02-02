@@ -84,7 +84,10 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], bool who)
 		printf("%d|", NUMERIC_HEADER[i]);
 		for (int j = 0; j < PLAYGROUND_SIZE; j++)
 		{
-			printf("%c", p[i][j]);
+			if (who == PC && p[i][j] == '#')
+				printf(" ");
+			else
+				printf("%c", p[i][j]);
 		}
 		printf("|\n");
 	}
@@ -134,7 +137,6 @@ int main()
 	createPCPlayground(pcPlayground);
 	savePlayground(pcPlayground, PC);
 	printPlayground(pcPlayground, PC);
-
 
 
 }
