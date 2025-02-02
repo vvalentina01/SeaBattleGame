@@ -18,6 +18,12 @@
 
 
 #define  _CRT_SECURE_NO_WARNINGS 
+#include <locale.h>  
+#include <stdio.h> 
+#include <stdlib.h>
+#include <time.h>
+#include "Windows.h"
+
 #include "Constants.h"
 #include "PlaygroundCreating.h"
 
@@ -33,14 +39,6 @@ void startMenu() {
 }*/
 
 
-
-void createPlayerPlayground()
-{
-	/*генерирование пол€ игрока*/
-	
-
-
-};
 
 void readPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 {
@@ -137,7 +135,10 @@ int main()
 	//test
 	createPCPlayground(pcPlayground);
 	savePlayground(pcPlayground, PC);
-	printPlayground(pcPlayground, PC);
 
+	printf("\n*** ѕоле игрока ***\n\n");
+	createPlayerPlayground(playerPlayground);
+	savePlayground(playerPlayground, PLAYER);
 
+	
 }

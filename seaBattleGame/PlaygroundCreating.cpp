@@ -1,9 +1,20 @@
+#define  _CRT_SECURE_NO_WARNINGS 
+#include <locale.h>  
+#include <stdio.h> 
+#include <stdlib.h>
+#include <time.h>
+#include "Windows.h"
 #include "Constants.h"
+#include "Utils.h"
 
 void createPCPlayground(char (*p)[PLAYGROUND_SIZE]);
 void createShip(int n, char (*p)[PLAYGROUND_SIZE]);
 bool checkoutShip(int n, COORD sheep[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUND_SIZE]);
 bool checkoutBeside(int x, int y, char (*p)[PLAYGROUND_SIZE]);
+bool createPlayerShip(int n, char (*p)[PLAYGROUND_SIZE]);
+void createPlayerPlayground(char (*p)[PLAYGROUND_SIZE]);
+
+//////////////////////////////////////////////////////////////////////////
 
 void createPCPlayground(char (*p)[PLAYGROUND_SIZE])
 {
@@ -56,6 +67,7 @@ void createShip(int n, char (*p)[PLAYGROUND_SIZE])
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////
 
 bool checkoutShip(int n, COORD sheep[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUND_SIZE])
 {
@@ -91,3 +103,64 @@ bool checkoutBeside(int x, int y, char (*p)[PLAYGROUND_SIZE])
 	return true;
 }
 
+
+//////////////////////////////////////////////////////////////////////////
+
+void createPlayerPlayground( char (*p)[PLAYGROUND_SIZE])
+{
+	printPlayground(p, NEW_PLAYER);
+	for (int i = MAX_SIZE_OF_SHIP; i > 0; --i)
+	{
+		for (int j = 0; j < MAX_SIZE_OF_SHIP + 1 - i; ++j)
+			createPlayerShip(i, p);
+	}
+
+
+};
+
+bool createPlayerShip(int n, char (*p)[PLAYGROUND_SIZE])
+{
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD ship[MAX_SIZE_OF_SHIP];
+	
+	if (n == MAX_SIZE_OF_SHIP) {
+		SetConsoleCursorPosition(hStdout, { 0, PLAYGROUND_SIZE * 2 });
+		printf(messagePrintCoord);
+	}
+	else {
+		SetConsoleCursorPosition(hStdout, { sizeof(messagePrintCoord)/sizeof(char), PLAYGROUND_SIZE * 2});
+		for (int i = 0; i <= n * 2; ++i)
+		{
+			printf(DELETE_SYMBOL);
+		}
+		SetConsoleCursorPosition(hStdout, { sizeof(messagePrintCoord) / sizeof(char) - 1, PLAYGROUND_SIZE * 2 });
+	}
+
+	for (int i = 0; i < n; ++i)
+	{
+		char x, y;
+		scanf("%c%c", &x, &y);
+		ship[i].X = ((char)x - 'A');
+		ship[i].Y = ((char)y - '1');
+
+	}
+
+	while (getchar() != '\n');
+
+	/*добавить проверку на корректность ввода*/
+	
+
+	for (int i = 0; i < n; ++i)
+		if (!checkoutBeside(ship[i].X, ship[i].Y, p))
+			return false;
+	
+	for (int i = 0; i < n; ++i)
+	{
+		ship[i].X += 2;
+		ship[i].Y += 2;
+		SetConsoleCursorPosition(hStdout, ship[i]);
+		printf("#");
+	}
+
+	return true;
+}
