@@ -136,16 +136,11 @@ void createPCPlayground(char (*p)[SIZE])
 {
 	/*рандомное генерирование поля противника*/
 	
-	createShip(4, p);
-	createShip(3, p);
-	createShip(3, p);
-	createShip(2, p);
-	createShip(2, p);
-	createShip(2, p);
-	createShip(1, p);
-	createShip(1, p);
-	createShip(1, p);
-	createShip(1, p);
+	for (int i = MAX_SIZE_OF_SHIP; i > 0; --i)
+	{
+		for (int j = 0; j < MAX_SIZE_OF_SHIP + 1 - i; ++j)
+			createShip(i, p);
+	}
 };
 
 void createPlayerPlayground()
