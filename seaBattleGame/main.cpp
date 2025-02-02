@@ -57,7 +57,6 @@ bool checkoutBeside(int x, int y, char (*p)[SIZE]);
 void createShip(int n, char (*p)[SIZE])
 {
 	COORD sheep[MAX_SIZE_OF_SHIP];
-	srand(time(NULL) + n);
 
 	do {
 		
@@ -228,6 +227,7 @@ void savePlayground(char (*p)[SIZE], bool who)
 int main()
 {
 	setlocale(LC_ALL, "Ru");
+	srand(time(NULL));
 
 	char pcPlayground[SIZE][SIZE];
 	char playerPlayground[SIZE][SIZE];
