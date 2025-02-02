@@ -1,14 +1,11 @@
 #include "Constants.h"
-#include <locale.h>  
-#include <stdlib.h>
-#include <time.h>
 
-void createPCPlayground(char (*p)[SIZE]);
-void createShip(int n, char (*p)[SIZE]);
-bool checkoutShip(int n, COORD sheep[MAX_SIZE_OF_SHIP], char (*p)[SIZE]);
-bool checkoutBeside(int x, int y, char (*p)[SIZE]);
+void createPCPlayground(char (*p)[PLAYGROUND_SIZE]);
+void createShip(int n, char (*p)[PLAYGROUND_SIZE]);
+bool checkoutShip(int n, COORD sheep[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUND_SIZE]);
+bool checkoutBeside(int x, int y, char (*p)[PLAYGROUND_SIZE]);
 
-void createPCPlayground(char (*p)[SIZE])
+void createPCPlayground(char (*p)[PLAYGROUND_SIZE])
 {
 	/*рандомное генерирование поля противника*/
 
@@ -19,7 +16,7 @@ void createPCPlayground(char (*p)[SIZE])
 	}
 };
 
-void createShip(int n, char (*p)[SIZE])
+void createShip(int n, char (*p)[PLAYGROUND_SIZE])
 {
 	COORD sheep[MAX_SIZE_OF_SHIP];
 
@@ -29,50 +26,50 @@ void createShip(int n, char (*p)[SIZE])
 
 		if (orientation == VERTICAL)
 		{
-			sheep[0].x = rand() % SIZE;
-			sheep[0].y = rand() % (SIZE + 1 - n);
+			sheep[0].X = rand() % PLAYGROUND_SIZE;
+			sheep[0].Y = rand() % (PLAYGROUND_SIZE + 1 - n);
 		}
 		else if (orientation == HORIZONTAL)
 		{
-			sheep[0].x = rand() % (SIZE + 1 - n);
-			sheep[0].y = rand() % (SIZE);
+			sheep[0].X = rand() % (PLAYGROUND_SIZE + 1 - n);
+			sheep[0].Y = rand() % (PLAYGROUND_SIZE);
 		}
 
 		for (int i = 1; i < n; i++)
 		{
 			if (orientation == VERTICAL)
 			{
-				sheep[i].x = sheep[i - 1].x;
-				sheep[i].y = sheep[i - 1].y + 1;
+				sheep[i].X = sheep[i - 1].X;
+				sheep[i].Y = sheep[i - 1].Y + 1;
 			}
 			else if (orientation == HORIZONTAL)
 			{
-				sheep[i].x = sheep[i - 1].x + 1;
-				sheep[i].y = sheep[i - 1].y;
+				sheep[i].X = sheep[i - 1].X + 1;
+				sheep[i].Y = sheep[i - 1].Y;
 			}
 		}
 	} while (!checkoutShip(n, sheep, p));
 
 	for (int i = 0; i < n; i++)
 	{
-		p[sheep[i].x][sheep[i].y] = '#';
+		p[sheep[i].X][sheep[i].Y] = '#';
 	}
 }
 
 
-bool checkoutShip(int n, COORD sheep[MAX_SIZE_OF_SHIP], char (*p)[SIZE])
+bool checkoutShip(int n, COORD sheep[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUND_SIZE])
 {
 	for (int i = 0; i < n; i++)
 	{
-		int x = sheep[i].x;
-		int y = sheep[i].y;
+		int x = sheep[i].X;
+		int y = sheep[i].Y;
 		if (!checkoutBeside(x, y, p))
 			return false;
 	}
 	return true;
 }
 
-bool checkoutBeside(int x, int y, char (*p)[SIZE])
+bool checkoutBeside(int x, int y, char (*p)[PLAYGROUND_SIZE])
 {
 	char beside[BESIDES_NUMBER] = {};
 	int k = 0;
@@ -80,7 +77,7 @@ bool checkoutBeside(int x, int y, char (*p)[SIZE])
 	{
 		for (int j = y - 1; j <= y + 1; j++)
 		{
-			if (i >= 0 && i < SIZE && j >= 0 && j < SIZE)
+			if (i >= 0 && i < PLAYGROUND_SIZE && j >= 0 && j < PLAYGROUND_SIZE)
 			{
 				beside[k] = p[i][j];
 			}

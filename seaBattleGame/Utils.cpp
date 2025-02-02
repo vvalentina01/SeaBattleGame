@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include <Windows.h>
 
+/*
 void setCharInPos(int x, int y, char c)
 {
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -8,3 +7,4 @@ void setCharInPos(int x, int y, char c)
 	SetConsoleCursorPosition(hStdout, pos);
 	printf("%c", c);
 }
+*/

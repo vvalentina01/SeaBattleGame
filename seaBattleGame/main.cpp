@@ -17,11 +17,7 @@
 //...
 
 
-#define  _CRT_SECURE_NO_WARNINGS // игнорируем предупреждения о "небезопасных" функциях из Си
-#include <stdio.h> //аналог iostream ??
-#include <locale.h>  //в случае с++ включен в iostream, не требуется доп. подключение
-#include <stdlib.h>
-#include <time.h>
+#define  _CRT_SECURE_NO_WARNINGS 
 #include "Constants.h"
 #include "PCPlaygroundCreating.h"
 
@@ -46,7 +42,7 @@ void createPlayerPlayground()
 
 };
 
-void readPlayground(char (*p)[SIZE], bool who)
+void readPlayground(char (*p)[PLAYGROUND_SIZE], bool who)
 {
 	FILE* f;
 
@@ -55,11 +51,11 @@ void readPlayground(char (*p)[SIZE], bool who)
 	else
 		f = fopen("C:/study/projects/seaBattle 2.0/save/pc.txt", "r");
 
-	for (int i = 0; i < SIZE; i++)
+	for (int i = 0; i < PLAYGROUND_SIZE; i++)
 	{
-		for (int j = 0; j < SIZE; j++)
+		for (int j = 0; j < PLAYGROUND_SIZE; j++)
 		{
-			fscanf(f, "%c", p[i][j]);
+			fscanf(f, "%c", &p[i][j]);
 			if (p[i][j] == '\n')
 			{
 				j--;
@@ -69,7 +65,7 @@ void readPlayground(char (*p)[SIZE], bool who)
 	fclose(f);
 }
 
-void printPlayground(char (*p)[SIZE], bool who)
+void printPlayground(char (*p)[PLAYGROUND_SIZE], bool who)
 {
 	FILE* f;
 
@@ -83,10 +79,10 @@ void printPlayground(char (*p)[SIZE], bool who)
 	printf("\n");
 	printf("  ----------");
 	printf("\n");
-	for (int i = 0; i < SIZE; i++)
+	for (int i = 0; i < PLAYGROUND_SIZE; i++)
 	{
 		printf("%d|", NUMERIC_HEADER[i]);
-		for (int j = 0; j < SIZE; j++)
+		for (int j = 0; j < PLAYGROUND_SIZE; j++)
 		{
 			printf("%c", p[i][j]);
 		}
@@ -98,7 +94,7 @@ void printPlayground(char (*p)[SIZE], bool who)
 		fclose(f);
 }
 
-void savePlayground(char (*p)[SIZE], bool who)
+void savePlayground(char (*p)[PLAYGROUND_SIZE], bool who)
 {
 	FILE* f;
 
@@ -107,9 +103,9 @@ void savePlayground(char (*p)[SIZE], bool who)
 	else
 		f = fopen("C:/study/projects/seaBattle 2.0/save/pc.txt", "w");
 
-	for (int i = 0; i < SIZE; i++)
+	for (int i = 0; i < PLAYGROUND_SIZE; i++)
 	{
-		for (int j = 0; j < SIZE; j++)
+		for (int j = 0; j < PLAYGROUND_SIZE; j++)
 		{
 			fprintf(f, "%c", p[i][j]);
 		}
@@ -125,10 +121,10 @@ int main()
 	setlocale(LC_ALL, "Ru");
 	srand(time(NULL));
 
-	char pcPlayground[SIZE][SIZE];
-	char playerPlayground[SIZE][SIZE];
-	for (int i = 0; i < SIZE; i++) {
-		for (int j = 0; j < SIZE; j++)
+	char pcPlayground[PLAYGROUND_SIZE][PLAYGROUND_SIZE];
+	char playerPlayground[PLAYGROUND_SIZE][PLAYGROUND_SIZE];
+	for (int i = 0; i < PLAYGROUND_SIZE; i++) {
+		for (int j = 0; j < PLAYGROUND_SIZE; j++)
 		{
 			pcPlayground[i][j] = ' ';
 		}
