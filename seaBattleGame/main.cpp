@@ -27,11 +27,18 @@
 const int SIZE = 10;
 const char ALPHABET_HEADER[] = "ABCDEFGHIJ";
 const int NUMERIC_HEADER[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
+const int MAX_SIZE_OF_SHIP = 4;
+const int BESIDES_NUMBER = 9;
+
 const bool PC = 0;
 const bool PLAYER = 1;
 const bool HORIZONTAL = 0;
 const bool VERTICAL = 1;
 
+struct COORD {
+	int x;
+	int y;
+};
 
 
 /*
@@ -44,53 +51,54 @@ void startMenu() {
 
 }*/
 
-bool checkoutShip(int n, int xy[4][2], char (*p)[SIZE]);
+bool checkoutShip(int n, COORD sheep[MAX_SIZE_OF_SHIP], char (*p)[SIZE]);
 bool checkoutBeside(int x, int y, char (*p)[SIZE]);
 
 void createShip(int n, char (*p)[SIZE])
 {
-	int xy[4][2];
+	COORD sheep[MAX_SIZE_OF_SHIP];
+	srand(time(NULL) + n);
 
 	do {
-		srand(time(NULL) + n);
+		
 		int orientation = rand() % 2;
 
 		if (orientation == VERTICAL)
 		{
-			xy[0][0] = rand() % SIZE;
-			xy[0][1] = rand() % (SIZE + 1 - n);
+			sheep[0].x = rand() % SIZE;
+			sheep[0].y = rand() % (SIZE + 1 - n);
 		}
 		else if (orientation == HORIZONTAL)
 		{
-			xy[0][0] = rand() % (SIZE + 1 - n);
-			xy[0][1] = rand() % (SIZE);
+			sheep[0].x = rand() % (SIZE + 1 - n);
+			sheep[0].y = rand() % (SIZE);
 		}
 
 		for (int i = 1; i < n; i++)
 		{
 			if (orientation == VERTICAL)
 			{
-				xy[i][0] = xy[i - 1][0];
-				xy[i][1] = xy[i - 1][1] + 1;
+				sheep[i].x = sheep[i - 1].x;
+				sheep[i].y = sheep[i - 1].y + 1;
 			}
 			else if (orientation == HORIZONTAL)
 			{
-				xy[i][0] = xy[i - 1][0] + 1;
-				xy[i][1] = xy[i - 1][1];
+				sheep[i].x = sheep[i - 1].x + 1;
+				sheep[i].y = sheep[i - 1].y;
 			}
 		}
 	}
-	while (!checkoutShip(n, xy, p));
+	while (!checkoutShip(n, sheep, p));
 	
 	for (int i = 0; i < n; i++)
 	{
-		p[xy[i][0]][xy[i][1]] = '#';
+		p[sheep[i].x][sheep[i].y] = '#';
 	}
 }
 
 bool checkoutBeside(int x, int y, char (*p)[SIZE])
 {
-	char beside[9] = {};
+	char beside[BESIDES_NUMBER] = {};
 	int k = 0;
 	for (int i = x - 1; i <= x + 1; i++)
 	{
@@ -111,12 +119,12 @@ bool checkoutBeside(int x, int y, char (*p)[SIZE])
 }
 
 
-bool checkoutShip(int n, int xy[4][2], char (*p)[SIZE])
+bool checkoutShip(int n, COORD sheep[MAX_SIZE_OF_SHIP], char (*p)[SIZE])
 {
 	for (int i = 0; i < n; i++)
 	{
-		int x = xy[i][0];
-		int y = xy[i][1];
+		int x = sheep[i].x;
+		int y = sheep[i].y;
 		if (!checkoutBeside(x, y, p))
 			return false;
 	}
@@ -153,9 +161,9 @@ void readPlayground(char (*p)[SIZE], bool who)
 	FILE* f;
 
 	if (who == PLAYER)
-		f = fopen("C:/study/projects/seaBattle/save/player.txt", "r");
+		f = fopen("C:/study/projects/seaBattle 2.0/save/player.txt", "r");
 	else
-		f = fopen("C:/study/projects/seaBattle/save/pc.txt", "r");
+		f = fopen("C:/study/projects/seaBattle 2.0/save/pc.txt", "r");
 
 	for (int i = 0; i < SIZE; i++)
 	{
@@ -176,9 +184,9 @@ void printPlayground(char (*p)[SIZE], bool who)
 	FILE* f;
 
 	if (who == PLAYER)
-		f = fopen("C:/study/projects/seaBattle/save/player.txt", "r");
+		f = fopen("C:/study/projects/seaBattle 2.0/save/player.txt", "r");
 	else
-		f = fopen("C:/study/projects/seaBattle/save/pc.txt", "r");
+		f = fopen("C:/study/projects/seaBattle 2.0/save/pc.txt", "r");
 
 	printf("  ");
 	printf(ALPHABET_HEADER);
@@ -196,7 +204,8 @@ void printPlayground(char (*p)[SIZE], bool who)
 	}
 	printf("  ----------");
 
-	fclose(f);
+	if (f != NULL)
+		fclose(f);
 }
 
 void savePlayground(char (*p)[SIZE], bool who)
@@ -204,9 +213,9 @@ void savePlayground(char (*p)[SIZE], bool who)
 	FILE* f;
 
 	if (who == PLAYER)
-		f = fopen("C:/study/projects/seaBattle/save/player.txt", "w");
+		f = fopen("C:/study/projects/seaBattle 2.0/save/player.txt", "w");
 	else
-		f = fopen("C:/study/projects/seaBattle/save/pc.txt", "w");
+		f = fopen("C:/study/projects/seaBattle 2.0/save/pc.txt", "w");
 
 	for (int i = 0; i < SIZE; i++)
 	{
@@ -216,8 +225,8 @@ void savePlayground(char (*p)[SIZE], bool who)
 		}
 		fprintf(f, "\n");
 	}
-
-	fclose(f);
+	if (f != NULL)
+		fclose(f);
 }
 
 
