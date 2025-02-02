@@ -1,3 +1,5 @@
-seaBattleGame/
-!seaBattleGame/Source.cpp
-*test.txt
+seaBattleGame/x64/
+seaBattleGame/seaBattleGame/
+seaBattleGame/*.vcxproj.*
+seaBattleGame/.vs/
+*test.*
