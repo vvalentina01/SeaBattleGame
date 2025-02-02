@@ -19,7 +19,7 @@
 
 #define  _CRT_SECURE_NO_WARNINGS 
 #include "Constants.h"
-#include "PCPlaygroundCreating.h"
+#include "PlaygroundCreating.h"
 
 
 /*
@@ -42,7 +42,7 @@ void createPlayerPlayground()
 
 };
 
-void readPlayground(char (*p)[PLAYGROUND_SIZE], bool who)
+void readPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 {
 	FILE* f;
 
@@ -65,7 +65,7 @@ void readPlayground(char (*p)[PLAYGROUND_SIZE], bool who)
 	fclose(f);
 }
 
-void printPlayground(char (*p)[PLAYGROUND_SIZE], bool who)
+void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 {
 	FILE* f;
 
@@ -84,10 +84,11 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], bool who)
 		printf("%d|", NUMERIC_HEADER[i]);
 		for (int j = 0; j < PLAYGROUND_SIZE; j++)
 		{
-			if (who == PC && p[i][j] == '#')
+			if (who == NEW_PLAYER || who == PC && p[i][j] == '#')
 				printf(" ");
 			else
 				printf("%c", p[i][j]);
+
 		}
 		printf("|\n");
 	}
