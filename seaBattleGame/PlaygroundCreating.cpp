@@ -6,6 +6,7 @@
 #include "Windows.h"
 #include "Constants.h"
 #include "Utils.h"
+#include <conio.h>
 
 void createPCPlayground(char (*p)[PLAYGROUND_SIZE]);
 void createShip(int n, char (*p)[PLAYGROUND_SIZE]);
@@ -109,58 +110,52 @@ bool checkoutBeside(int x, int y, char (*p)[PLAYGROUND_SIZE])
 void createPlayerPlayground( char (*p)[PLAYGROUND_SIZE])
 {
 	printPlayground(p, NEW_PLAYER);
-	for (int i = MAX_SIZE_OF_SHIP; i > 0; --i)
-	{
-		for (int j = 0; j < MAX_SIZE_OF_SHIP + 1 - i; ++j)
-			createPlayerShip(i, p);
-	}
 
+	COORD ship;
+	ship.X = 2;
+	ship.Y = 2;
 
-};
-
-bool createPlayerShip(int n, char (*p)[PLAYGROUND_SIZE])
-{
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	COORD ship[MAX_SIZE_OF_SHIP];
-	
-	if (n == MAX_SIZE_OF_SHIP) {
-		SetConsoleCursorPosition(hStdout, { 0, PLAYGROUND_SIZE * 2 });
-		printf(messagePrintCoord);
-	}
-	else {
-		SetConsoleCursorPosition(hStdout, { sizeof(messagePrintCoord)/sizeof(char), PLAYGROUND_SIZE * 2});
-		for (int i = 0; i <= n * 2; ++i)
-		{
-			printf(DELETE_SYMBOL);
+	SetConsoleCursorPosition(hStdout, ship);
+
+	// ввод поля
+	char c = 0;
+
+	while (c != 13)
+	{
+		c = _getch();
+		switch (c) {
+		case 'w':
+		case 'W': 
+			ship.Y -= 1;
+			SetConsoleCursorPosition(hStdout, {ship});
+			break;
+		case 's': 
+		case 'S':    
+			ship.Y += 1;
+			SetConsoleCursorPosition(hStdout, { ship });
+			break;
+		case 'd':
+		case 'D':    
+			ship.X += 1;
+			SetConsoleCursorPosition(hStdout, { ship });
+			break;
+		case 'a':
+		case 'A':   
+			ship.X -= 1;
+			SetConsoleCursorPosition(hStdout, { ship });
+			break;
+		case 32:    // space
+			printf("#");
+			p[ship.X][ship.Y] = '#';
+			break;
+		case 8:    // backspace
+			printf(" ");
+			p[ship.X][ship.Y] = ' ';
+			break;
 		}
-		SetConsoleCursorPosition(hStdout, { sizeof(messagePrintCoord) / sizeof(char) - 1, PLAYGROUND_SIZE * 2 });
 	}
-
-	for (int i = 0; i < n; ++i)
-	{
-		char x, y;
-		scanf("%c%c", &x, &y);
-		ship[i].X = ((char)x - 'A');
-		ship[i].Y = ((char)y - '1');
-
-	}
-
-	while (getchar() != '\n');
-
-	/*добавить проверку на корректность ввода*/
 	
+	// добавить проверку??
 
-	for (int i = 0; i < n; ++i)
-		if (!checkoutBeside(ship[i].X, ship[i].Y, p))
-			return false;
-	
-	for (int i = 0; i < n; ++i)
-	{
-		ship[i].X += 2;
-		ship[i].Y += 2;
-		SetConsoleCursorPosition(hStdout, ship[i]);
-		printf("#");
-	}
-
-	return true;
 }
