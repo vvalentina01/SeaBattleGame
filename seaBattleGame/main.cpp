@@ -17,6 +17,7 @@
 //...
 
 
+
 #define  _CRT_SECURE_NO_WARNINGS 
 #include <locale.h>  
 #include <stdio.h> 
@@ -28,15 +29,16 @@
 #include "PlaygroundCreating.h"
 
 
-/*
+
 void startMenu() {
 
-	printf("***** Welcome to Sea Battle *****");
+	/*printf("***** Welcome to Sea Battle *****");
 	printf("\t1 - New Game");
 	printf("\t2 - Continue Last Game");
 	char isNewGame = getchar();
+	*/
 
-}*/
+}
 
 
 
@@ -66,17 +68,36 @@ void readPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 {
 	FILE* f;
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD xy;
 
+
+	xy.Y = HEADER_Y - 2;
 	if (who == PLAYER)
-		f = fopen("C:/study/projects/seaBattle 2.0/save/player.txt", "r");
+	{
+		f = fopen(PATH_PLAYER, "r");
+		xy.X = PLAYER_X;
+		SetConsoleCursorPosition(hStdout, xy);
+		printf(HEADER_PLAYER);
+	}
 	else
-		f = fopen("C:/study/projects/seaBattle 2.0/save/pc.txt", "r");
+	{
+		f = fopen(PATH_PC, "r");
+		xy.X = 0;
+		SetConsoleCursorPosition(hStdout, xy);
+		printf(HEADER_PC);
+	}
 
+	xy.Y = HEADER_Y;
+	
+	SetConsoleCursorPosition(hStdout, xy);
 	printf("  ");
 	printf(ALPHABET_HEADER);
-	printf("\n");
+	++xy.Y;
+	SetConsoleCursorPosition(hStdout, xy);
 	printf("  ----------");
-	printf("\n");
+	++xy.Y;
+	SetConsoleCursorPosition(hStdout, xy);
 	for (int i = 0; i < PLAYGROUND_SIZE; i++)
 	{
 		printf("%d|", NUMERIC_HEADER[i]);
@@ -88,7 +109,9 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 				printf("%c", p[i][j]);
 
 		}
-		printf("|\n");
+		printf("|");
+		++xy.Y;
+		SetConsoleCursorPosition(hStdout, xy);
 	}
 	printf("  ----------");
 
@@ -129,16 +152,21 @@ int main()
 		for (int j = 0; j < PLAYGROUND_SIZE; j++)
 		{
 			pcPlayground[i][j] = ' ';
+			playerPlayground[i][j] = ' ';
 		}
 	}
 
 	//test
 	createPCPlayground(pcPlayground);
-	savePlayground(pcPlayground, PC);
+	//savePlayground(pcPlayground, PC);
 
-	printf("\n*** Поле игрока ***\n\n");
-	createPlayerPlayground(playerPlayground);
-	savePlayground(playerPlayground, PLAYER);
+	//createPlayerPlayground(playerPlayground);
+	//savePlayground(playerPlayground, PLAYER);
+
+	printPlayground(pcPlayground, PC);
+	printPlayground(playerPlayground, PLAYER);
+
+
 
 	
 }

@@ -112,8 +112,8 @@ void createPlayerPlayground( char (*p)[PLAYGROUND_SIZE])
 	printPlayground(p, NEW_PLAYER);
 
 	COORD ship;
-	ship.X = 2;
-	ship.Y = 2;
+	ship.X = PLAYER_X + 2;
+	ship.Y = HEADER_Y + 2;
 
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hStdout, ship);
@@ -147,11 +147,11 @@ void createPlayerPlayground( char (*p)[PLAYGROUND_SIZE])
 			break;
 		case 32:    // space
 			printf("#");
-			p[ship.X][ship.Y] = '#';
+			p[ship.X - PLAYER_X - 2][ship.Y - HEADER_Y - 2] = '#';
 			break;
 		case 8:    // backspace
 			printf(" ");
-			p[ship.X][ship.Y] = ' ';
+			p[ship.X - PLAYER_X - 2][ship.Y - HEADER_Y - 2] = ' ';
 			break;
 		}
 	}
