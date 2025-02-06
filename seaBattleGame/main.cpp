@@ -47,9 +47,9 @@ void readPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 	FILE* f;
 
 	if (who == PLAYER)
-		f = fopen("C:/study/projects/seaBattle 2.0/save/player.txt", "r");
+		f = fopen(PATH_PLAYER, "r");
 	else
-		f = fopen("C:/study/projects/seaBattle 2.0/save/pc.txt", "r");
+		f = fopen(PATH_PC, "r");
 
 	for (int i = 0; i < PLAYGROUND_SIZE; i++)
 	{
@@ -73,7 +73,7 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 
 
 	xy.Y = HEADER_Y - 2;
-	if (who == PLAYER)
+	if (who == PLAYER || who == NEW_PLAYER)
 	{
 		f = fopen(PATH_PLAYER, "r");
 		xy.X = PLAYER_X;
@@ -124,15 +124,15 @@ void savePlayground(char (*p)[PLAYGROUND_SIZE], bool who)
 	FILE* f;
 
 	if (who == PLAYER)
-		f = fopen("C:/study/projects/seaBattle 2.0/save/player.txt", "w");
+		f = fopen(PATH_PLAYER, "wt");
 	else
-		f = fopen("C:/study/projects/seaBattle 2.0/save/pc.txt", "w");
+		f = fopen(PATH_PC, "wt");
 
-	for (int i = 0; i < PLAYGROUND_SIZE; i++)
+	for (int y = 0; y < PLAYGROUND_SIZE; y++)
 	{
-		for (int j = 0; j < PLAYGROUND_SIZE; j++)
+		for (int x = 0; x < PLAYGROUND_SIZE; x++)
 		{
-			fprintf(f, "%c", p[i][j]);
+			fprintf(f, "%c", p[x][y]);
 		}
 		fprintf(f, "\n");
 	}
@@ -156,15 +156,9 @@ int main()
 		}
 	}
 
-	//test
-	createPCPlayground(pcPlayground);
-	//savePlayground(pcPlayground, PC);
-
-	//createPlayerPlayground(playerPlayground);
-	//savePlayground(playerPlayground, PLAYER);
-
 	printPlayground(pcPlayground, PC);
-	printPlayground(playerPlayground, PLAYER);
+	createPlayerPlayground(playerPlayground);
+	savePlayground(playerPlayground, PLAYER);
 
 
 
