@@ -1,22 +1,3 @@
-// ������� ���
-// 1. ������� ���� ���� (���������� �������)
-// 1.1.0 ��������� ����� �� ������ ����
-// 1.1.1. ��������� �� ����� (�������� � ��������� � ����)
-// 1.2. ��� �������� ����, ����� ������� ���������� "������" ��������
-// 2. ���� ����
-// 2.1. ��������� ����
-// 2.2. ���� ���� ��������.
-// 2.2.1. ���� � ����������
-// 2.2.2. ����������� ������ �� ������� � ������� ������ ���������� � ��������� �����-������ ������ (�-� ������)
-// � 1 
-//printf("%s\n", field[i]);
-//char field[11][12]
-// 1234567890 |  1234567890 
-//� 		  | � 		  
-//B #		  | B #	!	  
-//...
-
-
 #pragma execution_character_set("utf-8")
 #define  _CRT_SECURE_NO_WARNINGS 
 
@@ -74,10 +55,10 @@ char startMenu() {
 	return isNewGame;
 }
 
-void cleanHeader()
+void cleanScreen(int n)
 {
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	for (int i = 0; i < HEADER_Y; ++i)
+	for (int i = 0; i < n; ++i)
 	{
 		SetConsoleCursorPosition(hStdout, { 0, (short)i });
 		printf(EMPTY_STRING);
@@ -103,7 +84,7 @@ int main()
 	}
 
 	char isNewGame = startMenu();
-	cleanHeader();
+	cleanScreen(HEADER_Y);
 	if (isNewGame == NEW_GAME) {
 		SetConsoleCursorPosition(hStdout, { 0, 3 });
 		printf("Set your ships:\n");
@@ -112,15 +93,18 @@ int main()
 		printf("\tENTER - finish adding a ship");
 
 		createPlayerPlayground(playerPlayground);
-		cleanHeader();
-		SetConsoleCursorPosition(hStdout, { 0, 0});
-		printf("\tGame is started\t");
-
+		createPCPlayground(pcPlayground);
 	}
 
 	if (isNewGame == CONTINUE_LAST_GAME) {
-
+		
 	}
-	
+
+	cleanScreen(25);
+
+	printPlayground(pcPlayground, PC);
+	printPlayground(playerPlayground, PLAYER);
+	SetConsoleCursorPosition(hStdout, { 0, 0 });
+	printf("\tGame is started\t");
 	SetConsoleCursorPosition(hStdout, { 0, 25 });
 }
