@@ -172,7 +172,7 @@ bool checkoutPlayerShip(int n, COORD ship[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUN
 {
 	bool horizontal = true, vertical = true;
 
-	if (n < 0) 
+	if (n <= 0) 
 		return false;
 
 	for (int j = 1; j < n && vertical && horizontal; ++j) {
@@ -204,26 +204,32 @@ bool checkoutPlayerShip(int n, COORD ship[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUN
 void createPlayerPlayground(char (*p)[PLAYGROUND_SIZE])
 {
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	int typesOfShip[] = { 4, 3, 2, 1 };
+	int numberOfShip[] = { 4, 3, 2, 1 };
 	COORD ship[MAX_SIZE_OF_SHIP];
 
 	printPlayground(p, NEW_PLAYER);
+	printInstructions(-1, -1);
 
 	bool done = false;
 	while (!done) {
 		int n = inputNewShip(&ship);
 		
-		if (typesOfShip[n - 1] > 0 && checkoutPlayerShip(n, ship, p) && checkoutShip(n, ship, p))
+		if (numberOfShip[n - 1] > 0 && checkoutPlayerShip(n, ship, p) && checkoutShip(n, ship, p))
 		{
 			for (int j = 0; j < n; ++j)
 				p[ship[j].X][ship[j].Y] = '#';
-			--typesOfShip[n - 1];
+			--numberOfShip[n - 1];
 			SetConsoleCursorPosition(hStdout, { 0, 0 });
-			printf("Добавлен корабль из %d частей!", n);
+			printf(EMPTY_STRING);
+			SetConsoleCursorPosition(hStdout, { 0, 0 });
+			printf("Ship (type-%d) was added!", n);
+			printInstructions(n - 1, numberOfShip[n - 1]);
 		}
 		else {
 			SetConsoleCursorPosition(hStdout, { 0, 0 });
-			printf("Некорректный ввод!             ");
+			printf(EMPTY_STRING);
+			SetConsoleCursorPosition(hStdout, { 0, 0 });
+			printf("Uncorrect!                ");
 			for (int j = 0; j < n; ++j)
 			{
 				SetConsoleCursorPosition(hStdout, { short(ship[j].X + PLAYER_X + 2), short(ship[j].Y + HEADER_Y + 2) });
@@ -234,7 +240,25 @@ void createPlayerPlayground(char (*p)[PLAYGROUND_SIZE])
 
 		done = true;
 		for (int j = 0; j < MAX_SIZE_OF_SHIP; ++j)
-			if (typesOfShip[j] != 0)
+			if (numberOfShip[j] != 0)
 				done = false;
+	}
+}
+
+
+void printInstructions(short type, int n) {
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	int numberOfShip[] = { 4, 3, 2, 1 };
+	char typeOfShips[][MAX_SIZE_OF_SHIP + 1] = {"#\0", "##\0", "###", "####"};
+
+	if (type == -1) {
+		SetConsoleCursorPosition(hStdout, { 0, HEADER_Y });
+		printf("Available ships:\n");
+		for (int i = 0; i < MAX_SIZE_OF_SHIP; ++i)
+			printf("\t%s - %d\n", typeOfShips[i], numberOfShip[i]);
+	}
+	else {
+		SetConsoleCursorPosition(hStdout, { 0, (short)(HEADER_Y + type + 1)});
+		printf("\t%s - %d\n", typeOfShips[type], n);
 	}
 }
