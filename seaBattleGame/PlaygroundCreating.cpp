@@ -118,62 +118,61 @@ bool checkoutBeside(int x, int y, char (*p)[PLAYGROUND_SIZE])
 	return true;
 }
 
-int inputNewShip(COORD (*ship)[MAX_SIZE_OF_SHIP])
+int inputNewShip(COORD (*ship)[MAX_SIZE_OF_SHIP], COORD &position)
 {
-	COORD partOfShip;
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	partOfShip.X = PLAYER_X + 2;
-	partOfShip.Y = HEADER_Y + 2;
 	int i = 0;
 	char c = 0;
-	SetConsoleCursorPosition(hStdout, partOfShip);
+	SetConsoleCursorPosition(hStdout, position);
 	while (c != 13 && i <= MAX_SIZE_OF_SHIP)
 	{
 		c = _getch();
 		switch (c) {
 		case 'w':
 		case 'W':
-			if (partOfShip.Y > HEADER_Y + 2)
-				--partOfShip.Y;
+			if (position.Y > HEADER_Y + 2)
+				--position.Y;
 			else
-				partOfShip.Y += PLAYGROUND_SIZE - 1;
-			SetConsoleCursorPosition(hStdout, partOfShip);
+				position.Y += PLAYGROUND_SIZE - 1;
+			SetConsoleCursorPosition(hStdout, position);
 			break;
 		case 's':
 		case 'S':
-			if (partOfShip.Y < HEADER_Y + 2 + PLAYGROUND_SIZE - 1)
-				++partOfShip.Y;
+			if (position.Y < HEADER_Y + 2 + PLAYGROUND_SIZE - 1)
+				++position.Y;
 			else
-				partOfShip.Y -= PLAYGROUND_SIZE - 1;
-			SetConsoleCursorPosition(hStdout, partOfShip);
+				position.Y -= PLAYGROUND_SIZE - 1;
+			SetConsoleCursorPosition(hStdout, position);
 			break;
 		case 'd':
 		case 'D':
-			if (partOfShip.X < PLAYER_X + 2 + PLAYGROUND_SIZE - 1)
-				++partOfShip.X;
+			if (position.X < PLAYER_X + 2 + PLAYGROUND_SIZE - 1)
+				++position.X;
 			else
-				partOfShip.X -= PLAYGROUND_SIZE - 1;
-			SetConsoleCursorPosition(hStdout, partOfShip);
+				position.X -= PLAYGROUND_SIZE - 1;
+			SetConsoleCursorPosition(hStdout, position);
 			break;
 		case 'a':
 		case 'A':
-			if (partOfShip.X > PLAYER_X + 2)
-				--partOfShip.X;
+			if (position.X > PLAYER_X + 2)
+				--position.X;
 			else
-				partOfShip.X += PLAYGROUND_SIZE - 1;
-			SetConsoleCursorPosition(hStdout, partOfShip);
+				position.X += PLAYGROUND_SIZE - 1;
+			SetConsoleCursorPosition(hStdout, position);
 			break;
 		case 32:    // space				
 			printf("#");
-			(*ship)[i].X = partOfShip.X - PLAYER_X - 2;
-			(*ship)[i].Y = partOfShip.Y - HEADER_Y - 2;
-			++partOfShip.X;
+			(*ship)[i].X = position.X - PLAYER_X - 2;
+			(*ship)[i].Y = position.Y - HEADER_Y - 2;
+			if (position.X < PLAYER_X + 2 + PLAYGROUND_SIZE - 1)
+				++position.X;
+			SetConsoleCursorPosition(hStdout, position);
 			++i;
 			break;
 		case 8:    // backspace
 			printf(" ");
-			(*ship)[i].X = partOfShip.X - PLAYER_X - 2;
-			(*ship)[i].Y = partOfShip.Y - HEADER_Y - 2;
+			(*ship)[i].X = position.X - PLAYER_X - 2;
+			(*ship)[i].Y = position.Y - HEADER_Y - 2;
 			break;
 		}
 	}
@@ -217,14 +216,15 @@ void createPlayerPlayground(char (*p)[PLAYGROUND_SIZE])
 {
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	int numberOfShip[] = { 4, 3, 2, 1 };
-	COORD ship[MAX_SIZE_OF_SHIP];
-
+	COORD ship[MAX_SIZE_OF_SHIP] = {};
+	COORD position = { PLAYER_X + 2 , HEADER_Y + 2 };
 	printPlayground(p, NEW_PLAYER);
 	printInstructions(-1, -1);
 
+	int n = 1;
 	bool done = false;
 	while (!done) {
-		int n = inputNewShip(&ship);
+		n = inputNewShip(&ship, position);
 		
 		if (numberOfShip[n - 1] > 0 && checkoutPlayerShip(n, ship, p) && checkoutShip(n, ship, p))
 		{
