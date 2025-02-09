@@ -17,39 +17,41 @@
 //...
 
 
+#pragma execution_character_set("utf-8")
 #define  _CRT_SECURE_NO_WARNINGS 
+
 #include "Constants.h"
 #include "PlaygroundCreating.h"
 
+#include <locale.h>  
+#include <stdio.h> 
+#include <stdlib.h>
+#include <time.h>
+#include "Windows.h"
 
-/*
+
+
+
 void startMenu() {
 
-	printf("***** Welcome to Sea Battle *****");
+	/*printf("***** Welcome to Sea Battle *****");
 	printf("\t1 - New Game");
 	printf("\t2 - Continue Last Game");
 	char isNewGame = getchar();
+	*/
 
-}*/
-
-
-
-void createPlayerPlayground()
-{
-	/*генерирование поля игрока*/
-	
+}
 
 
-};
 
 void readPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 {
 	FILE* f;
 
 	if (who == PLAYER)
-		f = fopen("C:/study/projects/seaBattle 2.0/save/player.txt", "r");
+		f = fopen(PATH_PLAYER, "r");
 	else
-		f = fopen("C:/study/projects/seaBattle 2.0/save/pc.txt", "r");
+		f = fopen(PATH_PC, "r");
 
 	for (int i = 0; i < PLAYGROUND_SIZE; i++)
 	{
@@ -68,17 +70,36 @@ void readPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 {
 	FILE* f;
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD position;
 
-	if (who == PLAYER)
-		f = fopen("C:/study/projects/seaBattle 2.0/save/player.txt", "r");
+
+	position.Y = HEADER_Y - 2;
+	if (who == PLAYER || who == NEW_PLAYER)
+	{
+		f = fopen(PATH_PLAYER, "r");
+		position.X = PLAYER_X;
+		SetConsoleCursorPosition(hStdout, position);
+		printf(HEADER_PLAYER);
+	}
 	else
-		f = fopen("C:/study/projects/seaBattle 2.0/save/pc.txt", "r");
+	{
+		f = fopen(PATH_PC, "r");
+		position.X = 0;
+		SetConsoleCursorPosition(hStdout, position);
+		printf(HEADER_PC);
+	}
 
+	position.Y = HEADER_Y;
+	
+	SetConsoleCursorPosition(hStdout, position);
 	printf("  ");
 	printf(ALPHABET_HEADER);
-	printf("\n");
+	++position.Y;
+	SetConsoleCursorPosition(hStdout, position);
 	printf("  ----------");
-	printf("\n");
+	++position.Y;
+	SetConsoleCursorPosition(hStdout, position);
 	for (int i = 0; i < PLAYGROUND_SIZE; i++)
 	{
 		printf("%d|", NUMERIC_HEADER[i]);
@@ -90,7 +111,9 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 				printf("%c", p[i][j]);
 
 		}
-		printf("|\n");
+		printf("|");
+		++position.Y;
+		SetConsoleCursorPosition(hStdout, position);
 	}
 	printf("  ----------");
 
@@ -103,15 +126,15 @@ void savePlayground(char (*p)[PLAYGROUND_SIZE], bool who)
 	FILE* f;
 
 	if (who == PLAYER)
-		f = fopen("C:/study/projects/seaBattle 2.0/save/player.txt", "w");
+		f = fopen(PATH_PLAYER, "wt");
 	else
-		f = fopen("C:/study/projects/seaBattle 2.0/save/pc.txt", "w");
+		f = fopen(PATH_PC, "wt");
 
-	for (int i = 0; i < PLAYGROUND_SIZE; i++)
+	for (int y = 0; y < PLAYGROUND_SIZE; y++)
 	{
-		for (int j = 0; j < PLAYGROUND_SIZE; j++)
+		for (int x = 0; x < PLAYGROUND_SIZE; x++)
 		{
-			fprintf(f, "%c", p[i][j]);
+			fprintf(f, "%c", p[x][y]);
 		}
 		fprintf(f, "\n");
 	}
@@ -131,13 +154,15 @@ int main()
 		for (int j = 0; j < PLAYGROUND_SIZE; j++)
 		{
 			pcPlayground[i][j] = ' ';
+			playerPlayground[i][j] = ' ';
 		}
 	}
 
-	//test
-	createPCPlayground(pcPlayground);
-	savePlayground(pcPlayground, PC);
 	printPlayground(pcPlayground, PC);
+	createPlayerPlayground(playerPlayground);
+	savePlayground(playerPlayground, PLAYER);
 
 
+
+	
 }
