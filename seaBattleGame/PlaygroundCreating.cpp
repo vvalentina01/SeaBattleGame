@@ -133,22 +133,34 @@ int inputNewShip(COORD (*ship)[MAX_SIZE_OF_SHIP])
 		switch (c) {
 		case 'w':
 		case 'W':
-			--partOfShip.Y;
+			if (partOfShip.Y > HEADER_Y + 2)
+				--partOfShip.Y;
+			else
+				partOfShip.Y += PLAYGROUND_SIZE - 1;
 			SetConsoleCursorPosition(hStdout, partOfShip);
 			break;
 		case 's':
 		case 'S':
-			++partOfShip.Y;
+			if (partOfShip.Y < HEADER_Y + 2 + PLAYGROUND_SIZE - 1)
+				++partOfShip.Y;
+			else
+				partOfShip.Y -= PLAYGROUND_SIZE - 1;
 			SetConsoleCursorPosition(hStdout, partOfShip);
 			break;
 		case 'd':
 		case 'D':
-			++partOfShip.X;
+			if (partOfShip.X < PLAYER_X + 2 + PLAYGROUND_SIZE - 1)
+				++partOfShip.X;
+			else
+				partOfShip.X -= PLAYGROUND_SIZE - 1;
 			SetConsoleCursorPosition(hStdout, partOfShip);
 			break;
 		case 'a':
 		case 'A':
-			--partOfShip.X;
+			if (partOfShip.X > PLAYER_X + 2)
+				--partOfShip.X;
+			else
+				partOfShip.X += PLAYGROUND_SIZE - 1;
 			SetConsoleCursorPosition(hStdout, partOfShip);
 			break;
 		case 32:    // space				
