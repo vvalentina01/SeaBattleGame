@@ -1,21 +1,19 @@
+#pragma execution_character_set("utf-8")
 #define  _CRT_SECURE_NO_WARNINGS 
+
+#include "Constants.h"
+#include "PlaygroundCreating.h"
+#include "Utils.h"
+
+#include <conio.h>
 #include <locale.h>  
 #include <stdio.h> 
 #include <stdlib.h>
 #include <time.h>
 #include "Windows.h"
-#include "Constants.h"
-#include "Utils.h"
-#include <conio.h>
 
-void createPCPlayground(char (*p)[PLAYGROUND_SIZE]);
-void createShip(int n, char (*p)[PLAYGROUND_SIZE]);
-bool checkoutShip(int n, COORD sheep[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUND_SIZE]);
-bool checkoutBeside(int x, int y, char (*p)[PLAYGROUND_SIZE]);
-bool createPlayerShip(int n, char (*p)[PLAYGROUND_SIZE]);
-void createPlayerPlayground(char (*p)[PLAYGROUND_SIZE]);
 
-void sort(int n, bool orientation, COORD ship[MAX_SIZE_OF_SHIP])
+void sortCoordinates(int n, bool orientation, COORD ship[MAX_SIZE_OF_SHIP])
 {
 	COORD value;
 	for (int i = 0; i < n; ++i)
@@ -28,7 +26,7 @@ void sort(int n, bool orientation, COORD ship[MAX_SIZE_OF_SHIP])
 					ship[j - 1] = value;
 				}		
 
-			if (orientation == HORIZONTAL)
+			if (orientation == VERTICAL)
 				if (ship[j].Y < ship[j - 1].Y) {
 					value = ship[j];
 					ship[j] = ship[j - 1];
@@ -36,13 +34,9 @@ void sort(int n, bool orientation, COORD ship[MAX_SIZE_OF_SHIP])
 				}
 		}
 	}
-	
-
-//////////////////////////////////////////////////////////////////////////
 
 void createPCPlayground(char (*p)[PLAYGROUND_SIZE])
 {
-	/*рандомное генерирование поля противника*/
 
 	for (int i = MAX_SIZE_OF_SHIP; i > 0; --i)
 	{
@@ -91,8 +85,6 @@ void createShip(int n, char (*p)[PLAYGROUND_SIZE])
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////
-
 bool checkoutShip(int n, COORD ship[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUND_SIZE])
 {
 	for (int i = 0; i < n; i++)
@@ -127,111 +119,120 @@ bool checkoutBeside(int x, int y, char (*p)[PLAYGROUND_SIZE])
 	return true;
 }
 
+int inputNewShip(COORD (*ship)[MAX_SIZE_OF_SHIP])
+{
+	COORD partOfShip;
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	partOfShip.X = PLAYER_X + 2;
+	partOfShip.Y = HEADER_Y + 2;
+	int i = 0;
+	char c = 0;
+	SetConsoleCursorPosition(hStdout, partOfShip);
+	while (c != 13 && i <= MAX_SIZE_OF_SHIP)
+	{
+		c = _getch();
+		switch (c) {
+		case 'w':
+		case 'W':
+			--partOfShip.Y;
+			SetConsoleCursorPosition(hStdout, partOfShip);
+			break;
+		case 's':
+		case 'S':
+			++partOfShip.Y;
+			SetConsoleCursorPosition(hStdout, partOfShip);
+			break;
+		case 'd':
+		case 'D':
+			++partOfShip.X;
+			SetConsoleCursorPosition(hStdout, partOfShip);
+			break;
+		case 'a':
+		case 'A':
+			--partOfShip.X;
+			SetConsoleCursorPosition(hStdout, partOfShip);
+			break;
+		case 32:    // space				
+			printf("#");
+			(*ship)[i].X = partOfShip.X - PLAYER_X - 2;
+			(*ship)[i].Y = partOfShip.Y - HEADER_Y - 2;
+			++partOfShip.X;
+			++i;
+			break;
+		case 8:    // backspace
+			printf(" ");
+			(*ship)[i].X = partOfShip.X - PLAYER_X - 2;
+			(*ship)[i].Y = partOfShip.Y - HEADER_Y - 2;
+			break;
+		}
+	}
+	return i;
+}
 
-//////////////////////////////////////////////////////////////////////////
+bool checkoutPlayerShip(int n, COORD ship[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUND_SIZE])
+{
+	bool horizontal = true, vertical = true;
+
+	if (n < 0) 
+		return false;
+
+	for (int j = 1; j < n && vertical && horizontal; ++j) {
+		if (ship[j].Y != ship[0].Y)
+			horizontal = false;
+		if (ship[j].X != ship[0].X)
+			vertical = false;
+	}
+
+	if (horizontal)
+	{
+		sort(n, HORIZONTAL, ship);
+		for (int j = 1; j < n; ++j)
+			if (ship[j].X - ship[j - 1].X != 1)
+				horizontal = false;
+	}
+
+	if (vertical)
+	{
+		sort(n, VERTICAL, ship);
+		for (int j = 1; j < n; ++j)
+			if (ship[j].Y - ship[j - 1].Y != 1)
+				vertical = false;
+	}
+
+	return (horizontal || vertical);
+}
 
 void createPlayerPlayground(char (*p)[PLAYGROUND_SIZE])
 {
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	int typesOfShip[] = { 4, 3, 2, 1 };
+	COORD ship[MAX_SIZE_OF_SHIP];
+
 	printPlayground(p, NEW_PLAYER);
 
-	COORD partOfShip;
-	COORD ship[MAX_SIZE_OF_SHIP];
-	int typesOfShip[] = { 4, 3, 2, 1 };
-
-	partOfShip.X = PLAYER_X + 2;
-	partOfShip.Y = HEADER_Y + 2;
-
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-
 	bool done = false;
-	
- 	while (!done) {
-		int i = 0;
-		char c = 0;
-		SetConsoleCursorPosition(hStdout, partOfShip);
-		while (c != 13 && i <= MAX_SIZE_OF_SHIP)
-		{
-			c = _getch();
-			switch (c) {
-			case 'w':
-			case 'W':
-				--partOfShip.Y;
-				SetConsoleCursorPosition(hStdout, partOfShip);
-				break;
-			case 's':
-			case 'S':
-				++partOfShip.Y;
-				SetConsoleCursorPosition(hStdout, partOfShip);
-				break;
-			case 'd':
-			case 'D':
-				++partOfShip.X;
-				SetConsoleCursorPosition(hStdout, partOfShip);
-				break;
-			case 'a':
-			case 'A':
-				--partOfShip.X;
-				SetConsoleCursorPosition(hStdout, partOfShip);
-				break;
-			case 32:    // space				
-				printf("#");
-				ship[i].X = partOfShip.X - PLAYER_X - 2;
-				ship[i].Y = partOfShip.Y - HEADER_Y - 2;
-				++partOfShip.X;
-				++i;
-				break;
-			case 8:    // backspace
-				printf(" ");
-				ship[i].X = partOfShip.X - PLAYER_X - 2;
-				ship[i].Y = partOfShip.Y - HEADER_Y - 2;
-				break;
-			}
-		}
-
-		bool horizontal = true, vertical = true;
-
-		for (int j = 1; j < i && vertical && horizontal; ++j) {
-			if (ship[j].Y != ship[0].Y)
-				horizontal = false;
-			if (ship[j].X != ship[0].X)
-				vertical = false;
-		}
+	while (!done) {
+		int n = inputNewShip(&ship);
 		
-		if (horizontal)
+		if (typesOfShip[n - 1] > 0 && checkoutPlayerShip(n, ship, p) && checkoutShip(n, ship, p))
 		{
-			sort(i, HORIZONTAL, ship);
-			for (int j = 1; j < i; ++j)
-				if (ship[j].X - ship[j - 1].X != 1)
-					horizontal = false;
-		}
-
-		if (vertical)
-		{
-			sort(i, VERTICAL, ship);
-			for (int j = 1; j < i; ++j)
-				if (ship[j].Y - ship[j - 1].Y != 1)
-					vertical = false;
-		}
-
-		if ((horizontal || vertical) && i > 0 && typesOfShip[i - 1] > 0 && checkoutShip(i, ship, p))
-		{
-			for (int j = 0; j < i; ++j)
+			for (int j = 0; j < n; ++j)
 				p[ship[j].X][ship[j].Y] = '#';
-			--typesOfShip[i - 1];
+			--typesOfShip[n - 1];
 			SetConsoleCursorPosition(hStdout, { 0, 0 });
-			printf("Добавлен корабль из %d частей!", i);
+			printf("Р”РѕР±Р°РІР»РµРЅ РєРѕСЂР°Р±Р»СЊ РёР· %d С‡Р°СЃС‚РµР№!", n);
 		}
 		else {
 			SetConsoleCursorPosition(hStdout, { 0, 0 });
-			printf("Некорректный ввод!            ");
-			for (int j = 0; j < i; ++j)
+			printf("РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ РІРІРѕРґ!             ");
+			for (int j = 0; j < n; ++j)
 			{
 				SetConsoleCursorPosition(hStdout, { short(ship[j].X + PLAYER_X + 2), short(ship[j].Y + HEADER_Y + 2) });
 				if (p[ship[j].X][ship[j].Y] != '#')
 					printf(" ");
 			}
 		}
-		
+
 		done = true;
 		for (int j = 0; j < MAX_SIZE_OF_SHIP; ++j)
 			if (typesOfShip[j] != 0)

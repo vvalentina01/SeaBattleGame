@@ -17,16 +17,18 @@
 //...
 
 
-
+#pragma execution_character_set("utf-8")
 #define  _CRT_SECURE_NO_WARNINGS 
+
+#include "Constants.h"
+#include "PlaygroundCreating.h"
+
 #include <locale.h>  
 #include <stdio.h> 
 #include <stdlib.h>
 #include <time.h>
 #include "Windows.h"
 
-#include "Constants.h"
-#include "PlaygroundCreating.h"
 
 
 
@@ -69,35 +71,35 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 {
 	FILE* f;
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	COORD xy;
+	COORD position;
 
 
-	xy.Y = HEADER_Y - 2;
+	position.Y = HEADER_Y - 2;
 	if (who == PLAYER || who == NEW_PLAYER)
 	{
 		f = fopen(PATH_PLAYER, "r");
-		xy.X = PLAYER_X;
-		SetConsoleCursorPosition(hStdout, xy);
+		position.X = PLAYER_X;
+		SetConsoleCursorPosition(hStdout, position);
 		printf(HEADER_PLAYER);
 	}
 	else
 	{
 		f = fopen(PATH_PC, "r");
-		xy.X = 0;
-		SetConsoleCursorPosition(hStdout, xy);
+		position.X = 0;
+		SetConsoleCursorPosition(hStdout, position);
 		printf(HEADER_PC);
 	}
 
-	xy.Y = HEADER_Y;
+	position.Y = HEADER_Y;
 	
-	SetConsoleCursorPosition(hStdout, xy);
+	SetConsoleCursorPosition(hStdout, position);
 	printf("  ");
 	printf(ALPHABET_HEADER);
-	++xy.Y;
-	SetConsoleCursorPosition(hStdout, xy);
+	++position.Y;
+	SetConsoleCursorPosition(hStdout, position);
 	printf("  ----------");
-	++xy.Y;
-	SetConsoleCursorPosition(hStdout, xy);
+	++position.Y;
+	SetConsoleCursorPosition(hStdout, position);
 	for (int i = 0; i < PLAYGROUND_SIZE; i++)
 	{
 		printf("%d|", NUMERIC_HEADER[i]);
@@ -110,8 +112,8 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 
 		}
 		printf("|");
-		++xy.Y;
-		SetConsoleCursorPosition(hStdout, xy);
+		++position.Y;
+		SetConsoleCursorPosition(hStdout, position);
 	}
 	printf("  ----------");
 
