@@ -12,14 +12,16 @@ const int NEW_PLAYER = 2;
 const bool HORIZONTAL = 0;
 const bool VERTICAL = 1;
 
-const char messagePrintCoord[] = "Введите координаты: ";
-const char messageUncorrectCoord[] = "Некорректные координаты!";
 const char DELETE_SYMBOL[] = "\b  ";
 
-const short HEADER_Y = 10;
+const short HEADER_Y = 12;
 const short PLAYER_X = 30;
 
 const char PATH_PLAYER[] = "C:/study/projects/seaBattle 2.0/save/player.txt";
 const char PATH_PC[] = "C:/study/projects/seaBattle 2.0/save/pc.txt";
-const char HEADER_PLAYER[] = "Поле игрока";
-const char HEADER_PC[] = "Поле противника";
+const char HEADER_PLAYER[] = "  PLAYER  ";
+const char HEADER_PC[] = "   ENEMY   ";
+const char EMPTY_STRING[] = "                                                    ";
+
+const char NEW_GAME = '1';
+const char CONTINUE_LAST_GAME = '2';

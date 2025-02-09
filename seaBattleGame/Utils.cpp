@@ -44,14 +44,14 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 		f = fopen(PATH_PLAYER, "r");
 		position.X = PLAYER_X;
 		SetConsoleCursorPosition(hStdout, position);
-		printf(HEADER_PLAYER);
+		printf("\t%s", HEADER_PLAYER);
 	}
 	else
 	{
 		f = fopen(PATH_PC, "r");
 		position.X = 0;
 		SetConsoleCursorPosition(hStdout, position);
-		printf(HEADER_PC);
+		printf("\t%s", HEADER_PC);
 	}
 
 	position.Y = HEADER_Y;
