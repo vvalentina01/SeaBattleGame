@@ -185,7 +185,7 @@ bool checkoutPlayerShip(int n, COORD ship[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUN
 
 	if (horizontal)
 	{
-		sort(n, HORIZONTAL, ship);
+		sortCoordinates(n, HORIZONTAL, ship);
 		for (int j = 1; j < n; ++j)
 			if (ship[j].X - ship[j - 1].X != 1)
 				horizontal = false;
@@ -193,7 +193,7 @@ bool checkoutPlayerShip(int n, COORD ship[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUN
 
 	if (vertical)
 	{
-		sort(n, VERTICAL, ship);
+		sortCoordinates(n, VERTICAL, ship);
 		for (int j = 1; j < n; ++j)
 			if (ship[j].Y - ship[j - 1].Y != 1)
 				vertical = false;
