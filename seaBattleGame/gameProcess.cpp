@@ -1,8 +1,82 @@
 #define  _CRT_SECURE_NO_WARNINGS 
+#pragma execution_character_set("utf-8")
 
 #include "Constants.h"
 #include "gameProcess.h"
+#include "PlaygroundCreating.h"
 
-void playerShoot() {
+#include <conio.h>
+#include <locale.h>  
+#include <stdio.h> 
+#include <stdlib.h>
+#include "Windows.h"
 
+bool shootTrying(char (*p)[PLAYGROUND_SIZE], COORD position)
+{
+	if (p[position.Y - HEADER_Y - 2][position.X - 2] == '#') {
+		p[position.Y - HEADER_Y - 2][position.X - 2] = 'x';
+		printf("x");
+		//реализовать проверку
+		return true;
+	}
+	else {
+		p[position.Y - HEADER_Y - 2][position.X - 2] = 'o';
+		printf("o");
+		return false;
+	}
+}
+
+bool playerShoot(char (*p)[PLAYGROUND_SIZE]) {
+
+	COORD position;
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	position.X = 2;
+	position.Y = HEADER_Y + 2;
+
+	char c = 0;
+	SetConsoleCursorPosition(hStdout, position);
+	do
+	{
+		c = _getch();
+		switch (c) {
+		case 'w':
+		case 'W':
+			if (position.Y > HEADER_Y + 2)
+				--position.Y;
+			else
+				position.Y += PLAYGROUND_SIZE - 1;
+			SetConsoleCursorPosition(hStdout, position);
+			break;
+		case 's':
+		case 'S':
+			if (position.Y < HEADER_Y + 2 + PLAYGROUND_SIZE - 1)
+				++position.Y;
+			else
+				position.Y -= PLAYGROUND_SIZE - 1;
+			SetConsoleCursorPosition(hStdout, position);
+			break;
+		case 'd':
+		case 'D':
+			if (position.X < 2 + PLAYGROUND_SIZE - 1)
+				++position.X;
+			else
+				position.X -= PLAYGROUND_SIZE - 1;
+			SetConsoleCursorPosition(hStdout, position);
+			break;
+		case 'a':
+		case 'A':
+			if (position.X > 2)
+				--position.X;
+			else
+				position.X += PLAYGROUND_SIZE - 1;
+			SetConsoleCursorPosition(hStdout, position);
+			break;
+		case 32:    // space				
+			return shootTrying(p, position);
+
+			
+			break;
+		}
+	}
+	while (c != 32);
 }
