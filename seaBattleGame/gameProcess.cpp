@@ -71,8 +71,20 @@ bool playerShoot(char (*p)[PLAYGROUND_SIZE]) {
 				position.X += PLAYGROUND_SIZE - 1;
 			SetConsoleCursorPosition(hStdout, position);
 			break;
-		case 32:    // space				
-			return shootTrying(p, position);
+		case 32:    // space
+			bool result = shootTrying(p, position);
+
+			SetConsoleCursorPosition(hStdout, { 0, 3 });
+			printf("Player shoots to %c%d\n", ALPHABET_HEADER[position.X - 2], NUMERIC_HEADER[position.Y - HEADER_Y - 2]);
+			printf("Result: ");
+			if (result)
+				printf("hit\n");
+			else
+				printf("miss\n");
+			printf("\tto continue press any key... ");
+			_getch();
+
+			return result;
 
 			
 			break;
@@ -100,4 +112,41 @@ int isGameOver(char (*player)[PLAYGROUND_SIZE], char (*pc)[PLAYGROUND_SIZE]) {
 		return WIN;
 
 	return NOT_OVER;
+}
+
+bool pcShoot(char (*p)[PLAYGROUND_SIZE]) {
+
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD position;
+	bool result = 0;
+
+	do {
+		position.X = rand() % PLAYGROUND_SIZE;
+		position.Y = rand() % PLAYGROUND_SIZE;
+	} while (p[position.X][position.Y] == 'o');
+
+	SetConsoleCursorPosition(hStdout, { (short)(position.X + PLAYER_X + 2), (short)(position.Y + HEADER_Y + 2) });
+
+	if (p[position.X][position.Y] == ' ') {
+		p[position.X][position.Y] == 'o';
+		printf("o");
+		result = 0;
+	}
+
+	if (p[position.X][position.Y] == '#') {
+		p[position.X][position.Y] == 'x';
+		printf("x");
+		result = 1;
+	}
+
+	SetConsoleCursorPosition(hStdout, { 0, 3 });
+	printf("Enemy shoots to %c%d\n", ALPHABET_HEADER[position.X], NUMERIC_HEADER[position.Y]);
+	printf("Result: ");
+	if (result)
+		printf("hit\n");
+	else
+		printf("miss\n");
+	printf("\tto continue press any key... ");
+	_getch();
+	return result;
 }
