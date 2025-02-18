@@ -102,7 +102,7 @@ bool playerShoot(char (*p)[PLAYGROUND_SIZE]) {
 int isGameOver(char (*player)[PLAYGROUND_SIZE], char (*pc)[PLAYGROUND_SIZE]) {
 	bool playerIsLoser = 1;
 	bool pcIsLoser = 1;
-	for (int i = 0; i < PLAYGROUND_SIZE && playerIsLoser && pcIsLoser; ++i) {
+	for (int i = 0; i < PLAYGROUND_SIZE; ++i) {
 		for (int j = 0; j < PLAYGROUND_SIZE; ++j) {
 			if (player[i][j] == '#')
 				playerIsLoser = 0;
@@ -224,7 +224,7 @@ bool isShipDestroyed(COORD position, char (*p)[PLAYGROUND_SIZE]) {
 		}
 	}
 
-	for (int i = 0; i < MAX_SIZE_OF_SHIP; ++i) 
+	for (int i = 0; i < shipSize; ++i)
 		if (p[ship[i].Y][ship[i].X] == '#')
 			return false;
 	
