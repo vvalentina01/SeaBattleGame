@@ -150,3 +150,73 @@ bool pcShoot(char (*p)[PLAYGROUND_SIZE]) {
 	_getch();
 	return result;
 }
+
+bool isShipDestroyed(COORD position, char (*p)[PLAYGROUND_SIZE]) {
+
+	bool orientation;
+	bool onlyOne = 1;
+	
+	if (position.Y > 0)
+		if (p[position.Y - 1][position.X] == '#' || p[position.Y - 1][position.X] == 'x')
+			orientation = VERTICAL, onlyOne = 0;
+
+	if (position.Y < PLAYGROUND_SIZE)
+		if (p[position.Y + 1][position.X] == '#' || p[position.Y + 1][position.X] == 'x')
+			orientation = VERTICAL, onlyOne = 0;
+
+	if (position.X > 0)
+		if (p[position.Y][position.X - 1] == '#' || p[position.Y ][position.X - 1] == 'x')
+			orientation = HORIZONTAL, onlyOne = 0;
+
+	if (position.X < PLAYGROUND_SIZE)
+		if (p[position.Y][position.X + 1] == '#' || p[position.Y ][position.X + 1] == 'x')
+			orientation = HORIZONTAL, onlyOne = 0;
+
+	if (onlyOne)
+		return true;
+
+	COORD ship[MAX_SIZE_OF_SHIP];
+	int shipSize = 1;
+	ship[0] = position;
+	
+	if (orientation == HORIZONTAL) {
+
+		for (int i = 1; position.X < PLAYGROUND_SIZE && shipSize < MAX_SIZE_OF_SHIP &&
+			p[position.Y][position.X + i] != ' ' && p[position.Y][position.X + i] != 'o'; i++)
+		{
+			ship[shipSize] = { (short)(position.X + i), position.Y };
+			++shipSize;
+		}
+
+		for (int i = 1; position.X > 0 && shipSize < MAX_SIZE_OF_SHIP &&
+			p[position.Y][position.X - i] != ' ' && p[position.Y][position.X - i] != 'o'; i++)
+		{
+			ship[shipSize] = { (short)(position.X - i), position.Y };
+			++shipSize;
+		}
+	}
+
+	if (orientation == VERTICAL) {
+
+		for (int i = 1; position.Y < PLAYGROUND_SIZE && shipSize < MAX_SIZE_OF_SHIP && 
+			p[position.Y + i][position.X] != ' ' && p[position.Y + i][position.X] != 'o'; i++)
+		{
+			ship[shipSize] = { position.X, (short)(position.Y + i) };
+			++shipSize;
+		}
+
+		for (int i = 1; position.Y > 0 && shipSize < MAX_SIZE_OF_SHIP && 
+			p[position.Y - i][position.X] != ' ' && p[position.Y - i][position.X] != 'o'; i++)
+		{
+			ship[shipSize] = { position.X, (short)(position.Y - i) };
+			++shipSize;
+		}
+	}
+
+	for (int i = 0; i < MAX_SIZE_OF_SHIP; ++i) 
+		if (p[ship[i].Y][ship[i].X] == '#')
+			return false;
+	
+	return true;
+
+}
