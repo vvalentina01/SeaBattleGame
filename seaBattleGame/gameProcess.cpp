@@ -79,7 +79,7 @@ bool playerShoot(char (*p)[PLAYGROUND_SIZE]) {
 			printf("Result: ");
 			if (result) {
 				printf("hit\n");
-				if (isShipDestroyed({ (short)(position.X - 2), (short)(position.Y - HEADER_Y - 2) }, p))
+				if (isShipDestroyed({ (short)(position.X - 2), (short)(position.Y - HEADER_Y - 2) }, p, PC))
 					printf("Ship is destroyed!\n");
 				else
 					printf("Ship is not destroyed yet!\n");
@@ -150,7 +150,7 @@ bool pcShoot(char (*p)[PLAYGROUND_SIZE]) {
 	printf("Result: ");
 	if (result) {
 		printf("hit\n");
-		if (isShipDestroyed(position, p))
+		if (isShipDestroyed(position, p, PLAYER))
 			printf("Ship is destroyed!\n");
 		else
 			printf("Ship is not destroyed yet!\n");
@@ -162,7 +162,7 @@ bool pcShoot(char (*p)[PLAYGROUND_SIZE]) {
 	return result;
 }
 
-bool isShipDestroyed(COORD position, char (*p)[PLAYGROUND_SIZE]) {
+bool isShipDestroyed(COORD position, char (*p)[PLAYGROUND_SIZE], int who) {
 
 	bool orientation;
 	bool onlyOne = 1;
@@ -227,7 +227,88 @@ bool isShipDestroyed(COORD position, char (*p)[PLAYGROUND_SIZE]) {
 	for (int i = 0; i < shipSize; ++i)
 		if (p[ship[i].Y][ship[i].X] == '#')
 			return false;
-	
+
+	markAroundAsEmpty(shipSize, orientation, ship, p, who);
 	return true;
+
+}
+
+void markAroundAsEmpty(int n, bool orientation, COORD ship[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUND_SIZE], int who)
+{
+	sortCoordinates(n, orientation, ship);
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	int indent = 0;
+	if (who == PLAYER)
+		indent = PLAYER_X;
+
+	if (orientation == HORIZONTAL) {
+		int xStart = 0, xFinish = ship[0].X + n;
+
+		if (ship[0].X > 0) {
+			p[ship[0].Y][ship[0].X - 1] = 'o';
+			SetConsoleCursorPosition(hStdout, { (short)(ship[0].X - 1 + indent + 2),  (short)(ship[0].Y + HEADER_Y + 2) });
+			printf("o");
+			--xStart;
+		}
+
+		if (ship[n - 1].X < PLAYGROUND_SIZE) {
+			p[ship[n - 1].Y][ship[n - 1].X + 1] = 'o';
+			SetConsoleCursorPosition(hStdout, { (short)(ship[n - 1].X + 1 + indent + 2), (short)(ship[n - 1].Y + HEADER_Y + 2) });
+			printf("o");
+			++xFinish;
+		}
+
+		if (ship[0].Y > 0)
+			for (int i = ship[0].X + xStart; i < xFinish; ++i) {
+				p[ship[0].Y - 1][i] = 'o';
+				SetConsoleCursorPosition(hStdout, { (short)(i + indent + 2), (short)(ship[0].Y - 1 + HEADER_Y + 2) });
+				printf("o");
+			}
+
+		if (ship[0].Y < PLAYGROUND_SIZE)
+			for (int i = ship[0].X + xStart; i < xFinish; ++i) {
+				p[ship[0].Y + 1][i] = 'o';
+				SetConsoleCursorPosition(hStdout, { (short)(i + indent + 2) , (short)(ship[0].Y + 1 + HEADER_Y + 2) });
+				printf("o");
+			}
+	}
+
+	if (orientation == VERTICAL) {
+
+		int yStart = 0, yFinish = ship[0].Y + n;
+
+		if (ship[0].Y > 0) {
+			p[ship[0].Y - 1][ship[0].X] = 'o';
+			SetConsoleCursorPosition(hStdout, { (short)(ship[0].X + indent + 2),  (short)(ship[0].Y - 1 + HEADER_Y + 2) });
+			printf("o");
+			--yStart;
+		}
+
+		if (ship[n - 1].Y < PLAYGROUND_SIZE) {
+			p[ship[n - 1].Y + 1][ship[n - 1].X] = 'o';
+			SetConsoleCursorPosition(hStdout, { (short)(ship[n - 1].X + indent + 2), (short)(ship[n - 1].Y + 1 + HEADER_Y + 2) });
+			printf("o");
+			++yFinish;
+		}
+
+		if (ship[0].X > 0)
+			for (int i = ship[0].Y + yStart; i < yFinish; ++i) {
+				p[i][ship[0].X - 1] = 'o';
+				SetConsoleCursorPosition(hStdout, { (short)(ship[0].X - 1 + indent + 2), (short)(i + HEADER_Y + 2) });
+				printf("o");
+			}
+
+		if (ship[0].X < PLAYGROUND_SIZE)
+			for (int i = ship[0].Y + yStart; i < yFinish; ++i) {
+				p[i][ship[0].X + 1] = 'o';
+				SetConsoleCursorPosition(hStdout, { (short)(ship[0].X + 1 + indent + 2) , (short)(i + HEADER_Y + 2) });
+				printf("o");
+			}
+	}
+
+	SetConsoleCursorPosition(hStdout, { 0, 5 });
+
+	SetConsoleCursorPosition(hStdout, { 0, 5 });
 
 }
