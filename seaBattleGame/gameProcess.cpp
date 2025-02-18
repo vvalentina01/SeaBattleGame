@@ -13,14 +13,14 @@
 
 bool shootTrying(char (*p)[PLAYGROUND_SIZE], COORD position)
 {
-	if (p[position.Y - HEADER_Y - 2][position.X - 2] == '#') {
-		p[position.Y - HEADER_Y - 2][position.X - 2] = 'x';
+	if (p[position.Y][position.X] == '#') {
+		p[position.Y][position.X] = 'x';
 		printf("x");
 		//реализовать проверку
 		return true;
 	}
 	else {
-		p[position.Y - HEADER_Y - 2][position.X - 2] = 'o';
+		p[position.Y][position.X] = 'o';
 		printf("o");
 		return false;
 	}
@@ -72,15 +72,21 @@ bool playerShoot(char (*p)[PLAYGROUND_SIZE]) {
 			SetConsoleCursorPosition(hStdout, position);
 			break;
 		case 32:    // space
-			bool result = shootTrying(p, position);
+			bool result = shootTrying(p, { (short)(position.X - 2), (short)(position.Y - HEADER_Y - 2) });
 
 			SetConsoleCursorPosition(hStdout, { 0, 3 });
 			printf("Player shoots to %c%d\n", ALPHABET_HEADER[position.X - 2], NUMERIC_HEADER[position.Y - HEADER_Y - 2]);
 			printf("Result: ");
-			if (result)
+			if (result) {
 				printf("hit\n");
+				if (isShipDestroyed({ (short)(position.X - 2), (short)(position.Y - HEADER_Y - 2) }, p))
+					printf("Ship is destroyed!\n");
+				else
+					printf("Ship is not destroyed yet!\n");
+			}
 			else
 				printf("miss\n");
+
 			printf("\tto continue press any key... ");
 			_getch();
 
@@ -127,14 +133,14 @@ bool pcShoot(char (*p)[PLAYGROUND_SIZE]) {
 
 	SetConsoleCursorPosition(hStdout, { (short)(position.X + PLAYER_X + 2), (short)(position.Y + HEADER_Y + 2) });
 
-	if (p[position.X][position.Y] == ' ') {
-		p[position.X][position.Y] == 'o';
+	if (p[position.Y][position.X] == ' ') {
+		p[position.Y][position.X] = 'o';
 		printf("o");
 		result = 0;
 	}
 
-	if (p[position.X][position.Y] == '#') {
-		p[position.X][position.Y] == 'x';
+	if (p[position.Y][position.X] == '#') {
+		p[position.Y][position.X] = 'x';
 		printf("x");
 		result = 1;
 	}
@@ -142,8 +148,13 @@ bool pcShoot(char (*p)[PLAYGROUND_SIZE]) {
 	SetConsoleCursorPosition(hStdout, { 0, 3 });
 	printf("Enemy shoots to %c%d\n", ALPHABET_HEADER[position.X], NUMERIC_HEADER[position.Y]);
 	printf("Result: ");
-	if (result)
+	if (result) {
 		printf("hit\n");
+		if (isShipDestroyed(position, p))
+			printf("Ship is destroyed!\n");
+		else
+			printf("Ship is not destroyed yet!\n");
+	}
 	else
 		printf("miss\n");
 	printf("\tto continue press any key... ");
