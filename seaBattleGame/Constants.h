@@ -25,3 +25,8 @@ const char EMPTY_STRING[] = "                                                   
 
 const char NEW_GAME = '1';
 const char CONTINUE_LAST_GAME = '2';
+
+const int WIN = 1;
+const int LOSE = 0;
+const int NOT_OVER = -1;
+

@@ -6,3 +6,4 @@
 
 bool shootTrying(char (*p)[PLAYGROUND_SIZE], COORD position);
 bool playerShoot(char (*p)[PLAYGROUND_SIZE]);
+int isGameOver(char (*player)[PLAYGROUND_SIZE], char (*pc)[PLAYGROUND_SIZE]);

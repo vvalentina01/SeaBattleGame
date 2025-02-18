@@ -80,3 +80,24 @@ bool playerShoot(char (*p)[PLAYGROUND_SIZE]) {
 	}
 	while (c != 32);
 }
+
+int isGameOver(char (*player)[PLAYGROUND_SIZE], char (*pc)[PLAYGROUND_SIZE]) {
+	bool playerIsLoser = 1;
+	bool pcIsLoser = 1;
+	for (int i = 0; i < PLAYGROUND_SIZE && playerIsLoser && pcIsLoser; ++i) {
+		for (int j = 0; j < PLAYGROUND_SIZE; ++j) {
+			if (player[i][j] == '#')
+				playerIsLoser = 0;
+			if (pc[i][j] == '#')
+				pcIsLoser = 0;
+		}
+	}
+
+	if (playerIsLoser)
+		return LOSE;
+
+	if (pcIsLoser)
+		return WIN;
+
+	return NOT_OVER;
+}
