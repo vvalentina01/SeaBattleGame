@@ -2,6 +2,7 @@
 #define  _CRT_SECURE_NO_WARNINGS 
 
 #include "Constants.h"
+#include "gameProcess.h"
 #include "PlaygroundCreating.h"
 #include "Utils.h"
 
@@ -97,7 +98,8 @@ int main()
 	}
 
 	if (isNewGame == CONTINUE_LAST_GAME) {
-		
+		loadPlayground(playerPlayground, PLAYER);
+		loadPlayground(pcPlayground, PC);
 	}
 
 	cleanScreen(25);
@@ -107,4 +109,52 @@ int main()
 	SetConsoleCursorPosition(hStdout, { 0, 0 });
 	printf("\tGame is started\t");
 	SetConsoleCursorPosition(hStdout, { 0, 25 });
+
+	int roundCounter = 1;
+	int gameStatus = NOT_OVER;
+
+	while (gameStatus == NOT_OVER) { 
+
+		SetConsoleCursorPosition(hStdout, { 0, 1 });
+		printf("Round %d: ", roundCounter);
+
+		SetConsoleCursorPosition(hStdout, { 0, 2 });
+		printf("PLAYER MOVE");
+
+
+		bool playerMove = true;
+
+		while (playerMove) {
+			playerMove = playerShoot(pcPlayground);
+			for (int i = 3; i < 7; ++i) {
+				SetConsoleCursorPosition(hStdout, { 0, (short)i });
+				printf(EMPTY_STRING);
+			}
+		}
+
+		gameStatus = isGameOver(playerPlayground, pcPlayground);
+
+		if (gameStatus == NOT_OVER) {
+
+			SetConsoleCursorPosition(hStdout, { 0, 2 });
+			printf(EMPTY_STRING);
+			SetConsoleCursorPosition(hStdout, { 0, 2 });
+			printf("PC MOVE");
+
+			bool pcMove = true;
+
+			while (pcMove) {
+				pcMove = pcShoot(playerPlayground);
+				for (int i = 3; i < 7; ++i) {
+					SetConsoleCursorPosition(hStdout, { 0, (short)i });
+					printf(EMPTY_STRING);
+				}
+			}
+
+			gameStatus = isGameOver(playerPlayground, pcPlayground);
+		}
+
+		++roundCounter;
+	}
+
 }
