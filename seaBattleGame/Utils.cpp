@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include "Windows.h"
 
-void loadPlayground(char (*p)[PLAYGROUND_SIZE], int who)
+bool loadPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 {
 	FILE* f;
 
@@ -17,18 +17,18 @@ void loadPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 	else
 		f = fopen(PATH_PC, "r");
 
-	for (int i = 0; i < PLAYGROUND_SIZE; i++)
+	if (f == NULL)
+		return false;
+
+	for (int i = 0; i < PLAYGROUND_SIZE; ++i)
 	{
-		for (int j = 0; j < PLAYGROUND_SIZE; j++)
+		for (int j = 0; j < PLAYGROUND_SIZE; ++j)
 		{
 			fscanf(f, "%c", &p[i][j]);
-			if (p[i][j] == '\n')
-			{
-				j--;
-			}
 		}
 	}
 	fclose(f);
+	return true;
 }
 
 void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
@@ -85,7 +85,7 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 		fclose(f);
 }
 
-void savePlayground(char (*p)[PLAYGROUND_SIZE], bool who)
+bool savePlayground(char (*p)[PLAYGROUND_SIZE], bool who)
 {
 	FILE* f;
 
@@ -94,14 +94,16 @@ void savePlayground(char (*p)[PLAYGROUND_SIZE], bool who)
 	else
 		f = fopen(PATH_PC, "wt");
 
+	if (f == NULL)
+		return false;
 	for (int y = 0; y < PLAYGROUND_SIZE; y++)
 	{
 		for (int x = 0; x < PLAYGROUND_SIZE; x++)
 		{
 			fprintf(f, "%c", p[x][y]);
 		}
-		fprintf(f, "\n");
 	}
-	if (f != NULL)
-		fclose(f);
+
+	fclose(f);
+	return true;
 }
