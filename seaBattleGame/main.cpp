@@ -1,18 +1,18 @@
-// морской бой
-// 1. создать свое поле (расставить корабли)
-// 1.1.0 создавать прямо на экране поле
-// 1.1.1. загрузить из файла (возможно и сохранять в файл)
-// 1.2. При создании поля, сразу считать количество "кусков" кораблей
-// 2. сама игра
-// 2.1. отрисовка поля
-// 2.2. ввод куда стрелять.
-// 2.2.1. ввод с клавиатуры
-// 2.2.2. перемещаешь курсор на позицию в которую хочешь выстрелить и нажимаешь какую-нибудь кнопку (н-р пробел)
-// А 1 
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+// 1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
+// 1.1.0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+// 1.1.1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ)
+// 1.2. пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅ" пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// 2. пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+// 2.1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+// 2.2. пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+// 2.2.1. пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// 2.2.2. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅ-пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ)
+// пїЅ 1 
 //printf("%s\n", field[i]);
 //char field[11][12]
 // 1234567890 |  1234567890 
-//А 		  | А 		  
+//пїЅ 		  | пїЅ 		  
 //B #		  | B #	!	  
 //...
 
@@ -22,131 +22,75 @@
 
 #include "Constants.h"
 #include "PlaygroundCreating.h"
+#include "Utils.h"
 
+#include <conio.h>
 #include <locale.h>  
-#include <stdio.h> 
-#include <stdlib.h>
 #include <time.h>
+#include <stdio.h>
 #include "Windows.h"
 
 
 
 
-void startMenu() {
+char startMenu() {
 
-	/*printf("***** Welcome to Sea Battle *****");
-	printf("\t1 - New Game");
-	printf("\t2 - Continue Last Game");
-	char isNewGame = getchar();
-	*/
-
-}
-
-
-
-void readPlayground(char (*p)[PLAYGROUND_SIZE], int who)
-{
-	FILE* f;
-
-	if (who == PLAYER)
-		f = fopen(PATH_PLAYER, "r");
-	else
-		f = fopen(PATH_PC, "r");
-
-	for (int i = 0; i < PLAYGROUND_SIZE; i++)
-	{
-		for (int j = 0; j < PLAYGROUND_SIZE; j++)
-		{
-			fscanf(f, "%c", &p[i][j]);
-			if (p[i][j] == '\n')
-			{
-				j--;
-			}
-		}
-	}
-	fclose(f);
-}
-
-void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
-{
-	FILE* f;
+	printf("***** Welcome to Sea Battle *****\n");
+	printf("\t* - New Game\n");
+	printf("\t* - Continue Last Game\n");
+	printf("\n");
+	printf("use W and S to move\n");
+	printf("ise ENTER to shoose\n");
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	COORD position;
-
-
-	position.Y = HEADER_Y - 2;
-	if (who == PLAYER || who == NEW_PLAYER)
-	{
-		f = fopen(PATH_PLAYER, "r");
-		position.X = PLAYER_X;
-		SetConsoleCursorPosition(hStdout, position);
-		printf(HEADER_PLAYER);
-	}
-	else
-	{
-		f = fopen(PATH_PC, "r");
-		position.X = 0;
-		SetConsoleCursorPosition(hStdout, position);
-		printf(HEADER_PC);
-	}
-
-	position.Y = HEADER_Y;
-	
+	char isNewGame = -1;
+	COORD position = { 8, 1 };
 	SetConsoleCursorPosition(hStdout, position);
-	printf("  ");
-	printf(ALPHABET_HEADER);
-	++position.Y;
-	SetConsoleCursorPosition(hStdout, position);
-	printf("  ----------");
-	++position.Y;
-	SetConsoleCursorPosition(hStdout, position);
-	for (int i = 0; i < PLAYGROUND_SIZE; i++)
-	{
-		printf("%d|", NUMERIC_HEADER[i]);
-		for (int j = 0; j < PLAYGROUND_SIZE; j++)
-		{
-			if (who == NEW_PLAYER || who == PC && p[i][j] == '#')
-				printf(" ");
-			else
-				printf("%c", p[i][j]);
+	do {
 
+		isNewGame = _getch();
+		switch (isNewGame) {
+		case 'w':
+		case 'W':
+			if (position.Y > 1)
+				--position.Y;
+			SetConsoleCursorPosition(hStdout, position);
+			isNewGame = -1;
+			break;
+		case 's':
+		case 'S':
+			if (position.Y < 2)
+				++position.Y;
+			SetConsoleCursorPosition(hStdout, position);
+			isNewGame = -1;
+			break;
+		case 13:    // enter
+			isNewGame = position.Y + '0';
+			break;
+		default:
+			isNewGame = -1;
 		}
-		printf("|");
-		++position.Y;
-		SetConsoleCursorPosition(hStdout, position);
-	}
-	printf("  ----------");
 
-	if (f != NULL)
-		fclose(f);
+	} while (isNewGame == -1);
+	return isNewGame;
 }
 
-void savePlayground(char (*p)[PLAYGROUND_SIZE], bool who)
+void cleanHeader()
 {
-	FILE* f;
-
-	if (who == PLAYER)
-		f = fopen(PATH_PLAYER, "wt");
-	else
-		f = fopen(PATH_PC, "wt");
-
-	for (int y = 0; y < PLAYGROUND_SIZE; y++)
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	for (int i = 0; i < HEADER_Y; ++i)
 	{
-		for (int x = 0; x < PLAYGROUND_SIZE; x++)
-		{
-			fprintf(f, "%c", p[x][y]);
-		}
-		fprintf(f, "\n");
+		SetConsoleCursorPosition(hStdout, { 0, (short)i });
+		printf(EMPTY_STRING);
 	}
-	if (f != NULL)
-		fclose(f);
 }
+
 
 
 int main()
 {
 	setlocale(LC_ALL, "Ru");
 	srand(time(NULL));
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	char pcPlayground[PLAYGROUND_SIZE][PLAYGROUND_SIZE];
 	char playerPlayground[PLAYGROUND_SIZE][PLAYGROUND_SIZE];
@@ -158,11 +102,25 @@ int main()
 		}
 	}
 
-	printPlayground(pcPlayground, PC);
-	createPlayerPlayground(playerPlayground);
-	savePlayground(playerPlayground, PLAYER);
+	char isNewGame = startMenu();
+	cleanHeader();
+	if (isNewGame == NEW_GAME) {
+		SetConsoleCursorPosition(hStdout, { 0, 3 });
+		printf("Set your ships:\n");
+		printf("\tWASD - move\n");
+		printf("\tSPACE - add part of a ship\n");
+		printf("\tENTER - finish adding a ship");
 
+		createPlayerPlayground(playerPlayground);
+		cleanHeader();
+		SetConsoleCursorPosition(hStdout, { 0, 0});
+		printf("\tGame is started\t");
 
+	}
 
+	if (isNewGame == CONTINUE_LAST_GAME) {
+
+	}
 	
+	SetConsoleCursorPosition(hStdout, { 0, 25 });
 }

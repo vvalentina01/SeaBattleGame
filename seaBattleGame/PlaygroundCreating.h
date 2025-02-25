@@ -12,3 +12,4 @@ bool checkoutShip(int n, COORD ship[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUND_SIZE
 bool checkoutPlayerShip(int n, COORD ship[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUND_SIZE]);
 void sortCoordinates(int n, bool orientation, COORD ship[MAX_SIZE_OF_SHIP]);
 int inputNewShip(COORD(*ship)[MAX_SIZE_OF_SHIP]);
+void printInstructions(short type, int n);
