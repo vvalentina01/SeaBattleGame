@@ -2,7 +2,9 @@
 
 #include "Constants.h"
 #include "PlaygroundCreating.h"
+#include "Utils.h"
 
+#include <conio.h>
 #include <locale.h>  
 #include <stdio.h> 
 #include <stdlib.h>
@@ -110,4 +112,47 @@ bool savePlayground(char (*p)[PLAYGROUND_SIZE], bool who)
 void setCursor(COORD position) {
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hStdout, position);
+}
+
+char inputCoordinates(COORD* position, int who) {
+	int indent = 0;
+	if (who != PC)
+		indent = PLAYER_X;
+	char c = _getch();
+	switch (c) {
+	case 'w':
+	case 'W':
+		if ((*position).Y > HEADER_Y + 2)
+			--(*position).Y;
+		else
+			(*position).Y += PLAYGROUND_SIZE - 1;
+		setCursor((*position));
+		break;
+	case 's':
+	case 'S':
+		if ((*position).Y < HEADER_Y + 2 + PLAYGROUND_SIZE - 1)
+			++(*position).Y;
+		else
+			(*position).Y -= PLAYGROUND_SIZE - 1;
+		setCursor((*position));
+		break;
+	case 'd':
+	case 'D':
+		if ((*position).X < indent + 2 + PLAYGROUND_SIZE - 1)
+			++(*position).X;
+		else
+			(*position).X -= PLAYGROUND_SIZE - 1;
+		setCursor((*position));
+		break;
+	case 'a':
+	case 'A':
+		if ((*position).X > indent + 2)
+			--(*position).X;
+		else
+			(*position).X += PLAYGROUND_SIZE - 1;
+		setCursor((*position));
+		break;
+	default: 
+		return c;
+	}
 }

@@ -37,41 +37,8 @@ bool playerShoot(char (*p)[PLAYGROUND_SIZE]) {
 	setCursor(position);
 	do
 	{
-		c = _getch();
-		switch (c) {
-		case 'w':
-		case 'W':
-			if (position.Y > HEADER_Y + 2)
-				--position.Y;
-			else
-				position.Y += PLAYGROUND_SIZE - 1;
-			setCursor(position);
-			break;
-		case 's':
-		case 'S':
-			if (position.Y < HEADER_Y + 2 + PLAYGROUND_SIZE - 1)
-				++position.Y;
-			else
-				position.Y -= PLAYGROUND_SIZE - 1;
-			setCursor(position);
-			break;
-		case 'd':
-		case 'D':
-			if (position.X < 2 + PLAYGROUND_SIZE - 1)
-				++position.X;
-			else
-				position.X -= PLAYGROUND_SIZE - 1;
-			setCursor(position);
-			break;
-		case 'a':
-		case 'A':
-			if (position.X > 2)
-				--position.X;
-			else
-				position.X += PLAYGROUND_SIZE - 1;
-			setCursor(position);
-			break;
-		case 32:    // space
+		c = inputCoordinates(&position, PC);
+		if (c == 32) {
 			bool result = shootTrying(p, { (short)(position.X - 2), (short)(position.Y - HEADER_Y - 2) });
 
 			setCursor({ 0, 3 });
@@ -91,9 +58,6 @@ bool playerShoot(char (*p)[PLAYGROUND_SIZE]) {
 			_getch();
 
 			return result;
-
-			
-			break;
 		}
 	}
 	while (c != 32);

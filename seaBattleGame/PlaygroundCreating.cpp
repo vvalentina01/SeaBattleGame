@@ -126,50 +126,20 @@ int inputNewShip(COORD (*ship)[MAX_SIZE_OF_SHIP], COORD &position)
 	setCursor(position);
 	while (c != 13 && i <= MAX_SIZE_OF_SHIP)
 	{
-		c = _getch();
-		switch (c) {
-		case 'w':
-		case 'W':
-			if (position.Y > HEADER_Y + 2)
-				--position.Y;
-			else
-				position.Y += PLAYGROUND_SIZE - 1;
-			setCursor(position);
-			break;
-		case 's':
-		case 'S':
-			if (position.Y < HEADER_Y + 2 + PLAYGROUND_SIZE - 1)
-				++position.Y;
-			else
-				position.Y -= PLAYGROUND_SIZE - 1;
-			setCursor(position);
-			break;
-		case 'd':
-		case 'D':
-			if (position.X < PLAYER_X + 2 + PLAYGROUND_SIZE - 1)
-				++position.X;
-			else
-				position.X -= PLAYGROUND_SIZE - 1;
-			setCursor(position);
-			break;
-		case 'a':
-		case 'A':
-			if (position.X > PLAYER_X + 2)
-				--position.X;
-			else
-				position.X += PLAYGROUND_SIZE - 1;
-			setCursor(position);
-			break;
-		case 32:    // space				
+		c = inputCoordinates(&position, PLAYER);
+
+		if (c == 32)
+		{
 			printf("#");
-			(*ship)[i].X = position.X - PLAYER_X - 2;
+  			(*ship)[i].X = position.X - PLAYER_X - 2;
 			(*ship)[i].Y = position.Y - HEADER_Y - 2;
 			if (position.X < PLAYER_X + 2 + PLAYGROUND_SIZE - 1)
 				++position.X;
 			setCursor(position);
 			++i;
-			break;
-		case 8:    // backspace
+		}
+
+		if (c == 8) {
 			printf(" ");
 			(*ship)[i].X = position.X - PLAYER_X - 2;
 			(*ship)[i].Y = position.Y - HEADER_Y - 2;
