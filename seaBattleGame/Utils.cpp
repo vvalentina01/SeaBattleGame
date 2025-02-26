@@ -34,7 +34,6 @@ bool loadPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 {
 	FILE* f;
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD position;
 
 
@@ -43,27 +42,27 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 	{
 		f = fopen(PATH_PLAYER, "r");
 		position.X = PLAYER_X;
-		SetConsoleCursorPosition(hStdout, position);
+		setCursor(position);
 		printf("\t%s", HEADER_PLAYER);
 	}
 	else
 	{
 		f = fopen(PATH_PC, "r");
 		position.X = 0;
-		SetConsoleCursorPosition(hStdout, position);
+		setCursor(position);
 		printf("%s", HEADER_PC);
 	}
 
 	position.Y = HEADER_Y;
 
-	SetConsoleCursorPosition(hStdout, position);
+	setCursor(position);
 	printf("  ");
 	printf(ALPHABET_HEADER);
 	++position.Y;
-	SetConsoleCursorPosition(hStdout, position);
+	setCursor(position);
 	printf("  ----------");
 	++position.Y;
-	SetConsoleCursorPosition(hStdout, position);
+	setCursor(position);
 	for (int i = 0; i < PLAYGROUND_SIZE; i++)
 	{
 		printf("%d|", NUMERIC_HEADER[i]);
@@ -77,7 +76,7 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 		}
 		printf("|");
 		++position.Y;
-		SetConsoleCursorPosition(hStdout, position);
+		setCursor(position);
 	}
 	printf("  ----------");
 
@@ -106,4 +105,9 @@ bool savePlayground(char (*p)[PLAYGROUND_SIZE], bool who)
 
 	fclose(f);
 	return true;
+}
+
+void setCursor(COORD position) {
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorPosition(hStdout, position);
 }

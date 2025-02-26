@@ -23,10 +23,9 @@ char startMenu() {
 	printf("\n");
 	printf("use W and S to move\n");
 	printf("ise ENTER to shoose\n");
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	char isNewGame = -1;
 	COORD position = { 8, 1 };
-	SetConsoleCursorPosition(hStdout, position);
+	setCursor(position);
 	do {
 
 		isNewGame = _getch();
@@ -35,14 +34,14 @@ char startMenu() {
 		case 'W':
 			if (position.Y > 1)
 				--position.Y;
-			SetConsoleCursorPosition(hStdout, position);
+			setCursor(position);
 			isNewGame = -1;
 			break;
 		case 's':
 		case 'S':
 			if (position.Y < 2)
 				++position.Y;
-			SetConsoleCursorPosition(hStdout, position);
+			setCursor(position);
 			isNewGame = -1;
 			break;
 		case 13:    // enter
@@ -58,10 +57,9 @@ char startMenu() {
 
 void cleanScreen(int n)
 {
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	for (int i = 0; i < n; ++i)
 	{
-		SetConsoleCursorPosition(hStdout, { 0, (short)i });
+		setCursor({ 0, (short)i });
 		printf(EMPTY_STRING);
 	}
 }
@@ -72,7 +70,6 @@ int main()
 {
 	setlocale(LC_ALL, "Ru");
 	srand(time(NULL));
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	char pcPlayground[PLAYGROUND_SIZE][PLAYGROUND_SIZE];
 	char playerPlayground[PLAYGROUND_SIZE][PLAYGROUND_SIZE];
@@ -87,7 +84,7 @@ int main()
 	char isNewGame = startMenu();
 	cleanScreen(HEADER_Y);
 	if (isNewGame == NEW_GAME) {
-		SetConsoleCursorPosition(hStdout, { 0, 3 });
+		setCursor({ 0, 3 });
 		printf("Set your ships:\n");
 		printf("\tWASD - move\n");
 		printf("\tSPACE - add part of a ship\n");
@@ -106,19 +103,19 @@ int main()
 
 	printPlayground(pcPlayground, PC);
 	printPlayground(playerPlayground, PLAYER);
-	SetConsoleCursorPosition(hStdout, { 0, 0 });
+	setCursor({ 0, 0 });
 	printf("\tGame is started\t");
-	SetConsoleCursorPosition(hStdout, { 0, 25 });
+	setCursor({ 0, 25 });
 
 	int roundCounter = 1;
 	int gameStatus = NOT_OVER;
 
 	while (gameStatus == NOT_OVER) { 
 
-		SetConsoleCursorPosition(hStdout, { 0, 1 });
+		setCursor({ 0, 1 });
 		printf("Round %d: ", roundCounter);
 
-		SetConsoleCursorPosition(hStdout, { 0, 2 });
+		setCursor({ 0, 2 });
 		printf("PLAYER MOVE");
 
 
@@ -127,7 +124,7 @@ int main()
 		while (playerMove) {
 			playerMove = playerShoot(pcPlayground);
 			for (int i = 3; i < 7; ++i) {
-				SetConsoleCursorPosition(hStdout, { 0, (short)i });
+				setCursor({ 0, (short)i });
 				printf(EMPTY_STRING);
 			}
 		}
@@ -136,9 +133,9 @@ int main()
 
 		if (gameStatus == NOT_OVER) {
 
-			SetConsoleCursorPosition(hStdout, { 0, 2 });
+			setCursor({ 0, 2 });
 			printf(EMPTY_STRING);
-			SetConsoleCursorPosition(hStdout, { 0, 2 });
+			setCursor({ 0, 2 });
 			printf("PC MOVE");
 
 			bool pcMove = true;
@@ -146,7 +143,7 @@ int main()
 			while (pcMove) {
 				pcMove = pcShoot(playerPlayground);
 				for (int i = 3; i < 7; ++i) {
-					SetConsoleCursorPosition(hStdout, { 0, (short)i });
+					setCursor({ 0, (short)i });
 					printf(EMPTY_STRING);
 				}
 			}
