@@ -68,15 +68,19 @@ int isGameOver(char (*player)[PLAYGROUND_SIZE], char (*pc)[PLAYGROUND_SIZE]) {
 	return NOT_OVER;
 }
 
-bool pcShoot(char (*p)[PLAYGROUND_SIZE]) {
+bool pcShoot(char (*p)[PLAYGROUND_SIZE], COORD* variations, int& varSize) {
 
 	COORD position;
 	bool result = 0;
 
+	int r = 0;
 	do {
-		position.X = rand() % PLAYGROUND_SIZE;
-		position.Y = rand() % PLAYGROUND_SIZE;
+		r = rand() % varSize;
+		position = variations[r];
 	} while (p[position.X][position.Y] == 'o');
+
+	--varSize;
+	variations[r] = variations[varSize];
 
 	setCursor({ (short)(position.X + PLAYER_X + 2), (short)(position.Y + HEADER_Y + 2) });
 

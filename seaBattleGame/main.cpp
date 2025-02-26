@@ -110,6 +110,15 @@ int main()
 	int roundCounter = 1;
 	int gameStatus = NOT_OVER;
 
+	int varSize = PLAYGROUND_SIZE * PLAYGROUND_SIZE;
+	COORD* variations = (COORD*)malloc(varSize * sizeof(COORD));
+
+	if (variations == NULL)
+	return 0; // add comment to user
+	for (short i = 0; i < PLAYGROUND_SIZE; ++i)
+		for (short j = 0; j < PLAYGROUND_SIZE; ++j)
+			variations[i * PLAYGROUND_SIZE + j] = { i, j };
+
 	while (gameStatus == NOT_OVER) { 
 
 		setCursor({ 0, 1 });
@@ -141,7 +150,7 @@ int main()
 			bool pcMove = true;
 
 			while (pcMove) {
-				pcMove = pcShoot(playerPlayground);
+				pcMove = pcShoot(playerPlayground, variations, varSize);
 				for (int i = 3; i < 7; ++i) {
 					setCursor({ 0, (short)i });
 					printf(EMPTY_STRING);
