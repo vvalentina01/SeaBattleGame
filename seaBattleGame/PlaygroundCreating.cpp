@@ -80,7 +80,7 @@ void createShip(int n, char (*p)[PLAYGROUND_SIZE])
 
 	for (int i = 0; i < n; i++)
 	{
-		p[ship[i].X][ship[i].Y] = '#';
+		p[ship[i].Y][ship[i].X] = '#';
 	}
 }
 
@@ -106,7 +106,7 @@ bool checkoutBeside(int x, int y, char (*p)[PLAYGROUND_SIZE])
 		{
 			if (i >= 0 && i < PLAYGROUND_SIZE && j >= 0 && j < PLAYGROUND_SIZE)
 			{
-				beside[k] = p[i][j];
+				beside[k] = p[j][i];
 			}
 			if (beside[k] == '#')
 			{
@@ -198,7 +198,7 @@ void createPlayerPlayground(char (*p)[PLAYGROUND_SIZE])
 		if (countOfEveryShipTypes[n - 1] > 0 && checkoutPlayerShip(n, ship, p) && checkoutShip(n, ship, p))
 		{
 			for (int j = 0; j < n; ++j)
-				p[ship[j].X][ship[j].Y] = '#';
+				p[ship[j].Y][ship[j].X] = '#';
 			--countOfEveryShipTypes[n - 1];
 			setCursor({ 0, 0 });
 			printf(EMPTY_STRING);
@@ -214,7 +214,7 @@ void createPlayerPlayground(char (*p)[PLAYGROUND_SIZE])
 			for (int j = 0; j < n; ++j)
 			{
 				setCursor({ short(ship[j].X + PLAYER_X + 2), short(ship[j].Y + HEADER_Y + 2) });
-				if (p[ship[j].X][ship[j].Y] != '#')
+				if (p[ship[j].Y][ship[j].X] != '#')
 					printf(" ");
 			}
 		}
