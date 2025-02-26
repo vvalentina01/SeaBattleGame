@@ -10,3 +10,4 @@ int isGameOver(char (*player)[PLAYGROUND_SIZE], char (*pc)[PLAYGROUND_SIZE]);
 bool pcShoot(char (*p)[PLAYGROUND_SIZE]);
 bool isShipDestroyed(COORD position, char (*p)[PLAYGROUND_SIZE], int who);
 void markAroundAsEmpty(int n, bool orientation, COORD ship[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUND_SIZE], int who);
+void resultOfMove(bool result, COORD position, int who, char (*p)[PLAYGROUND_SIZE]);

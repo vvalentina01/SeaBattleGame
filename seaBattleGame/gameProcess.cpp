@@ -40,23 +40,7 @@ bool playerShoot(char (*p)[PLAYGROUND_SIZE]) {
 		c = inputCoordinates(&position, PC);
 		if (c == 32) {
 			bool result = shootTrying(p, { (short)(position.X - 2), (short)(position.Y - HEADER_Y - 2) });
-
-			setCursor({ 0, 3 });
-			printf("Player shoots to %c%d\n", ALPHABET_HEADER[position.X - 2], NUMERIC_HEADER[position.Y - HEADER_Y - 2]);
-			printf("Result: ");
-			if (result) {
-				printf("hit\n");
-				if (isShipDestroyed({ (short)(position.X - 2), (short)(position.Y - HEADER_Y - 2) }, p, PC))
-					printf("Ship is destroyed!\n");
-				else
-					printf("Ship is not destroyed yet!\n");
-			}
-			else
-				printf("miss\n");
-
-			printf("\tto continue press any key... ");
-			_getch();
-
+			resultOfMove(result, { (short)(position.X - 2), (short)(position.Y - HEADER_Y - 2) }, PLAYER, p);
 			return result;
 		}
 	}
@@ -107,21 +91,7 @@ bool pcShoot(char (*p)[PLAYGROUND_SIZE]) {
 		printf("x");
 		result = 1;
 	}
-
-	setCursor({ 0, 3 });
-	printf("Enemy shoots to %c%d\n", ALPHABET_HEADER[position.X], NUMERIC_HEADER[position.Y]);
-	printf("Result: ");
-	if (result) {
-		printf("hit\n");
-		if (isShipDestroyed(position, p, PLAYER))
-			printf("Ship is destroyed!\n");
-		else
-			printf("Ship is not destroyed yet!\n");
-	}
-	else
-		printf("miss\n");
-	printf("\tto continue press any key... ");
-	_getch();
+	resultOfMove(result, position, PC, p);
 	return result;
 }
 
@@ -271,4 +241,26 @@ void markAroundAsEmpty(int n, bool orientation, COORD ship[MAX_SIZE_OF_SHIP], ch
 
 	setCursor({ 0, 5 });
 
+}
+
+void resultOfMove(bool result, COORD position, int who, char (*p)[PLAYGROUND_SIZE]) {
+	int indentX = 0, indentY = 0;
+	setCursor({ 0, 3 });
+	if (who == PLAYER) 
+		printf("Player ");
+	else
+		printf("Enenmy ");
+	printf("shoots to %c%d\n", ALPHABET_HEADER[position.X], NUMERIC_HEADER[position.Y]);
+	printf("Result: ");
+	if (result) {
+		printf("hit\n");
+		if (isShipDestroyed(position, p, who))
+			printf("Ship is destroyed!\n");
+		else
+			printf("Ship is not destroyed yet!\n");
+	}
+	else
+		printf("miss\n");
+	printf("\tto continue press any key... ");
+	_getch();
 }
