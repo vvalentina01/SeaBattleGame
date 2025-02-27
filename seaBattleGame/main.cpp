@@ -10,6 +10,7 @@
 #include <locale.h>  
 #include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "Windows.h"
 
 
@@ -115,6 +116,9 @@ int main()
 
 	if (variations == NULL)
 	return 0; // add comment to user
+
+	notDestroyedShip nds{};
+
 	for (short i = 0; i < PLAYGROUND_SIZE; ++i)
 		for (short j = 0; j < PLAYGROUND_SIZE; ++j)
 			variations[i * PLAYGROUND_SIZE + j] = { i, j };
@@ -150,7 +154,7 @@ int main()
 			bool pcMove = true;
 
 			while (pcMove) {
-				pcMove = pcShoot(playerPlayground, variations, varSize);
+				pcMove = pcShoot(playerPlayground, variations, varSize, nds);
 				for (int i = 3; i < 7; ++i) {
 					setCursor({ 0, (short)i });
 					printf(EMPTY_STRING);
