@@ -111,14 +111,14 @@ bool pcShoot(char (*p)[PLAYGROUND_SIZE], COORD* variations, int& varSize, notDes
 
 bool isShipDestroyed(COORD position, char (*p)[PLAYGROUND_SIZE], int who) {
 
-	bool orientation;
+	bool orientation = HORIZONTAL;
 	bool onlyOne = 1;
 
 	if (position.Y > 0)
 		if (p[position.Y - 1][position.X] == '#' || p[position.Y - 1][position.X] == 'x')
 			orientation = VERTICAL, onlyOne = 0;
 
-	if (position.Y < PLAYGROUND_SIZE)
+	if (position.Y + 1 < PLAYGROUND_SIZE)
 		if (p[position.Y + 1][position.X] == '#' || p[position.Y + 1][position.X] == 'x')
 			orientation = VERTICAL, onlyOne = 0;
 
@@ -126,70 +126,71 @@ bool isShipDestroyed(COORD position, char (*p)[PLAYGROUND_SIZE], int who) {
 		if (p[position.Y][position.X - 1] == '#' || p[position.Y][position.X - 1] == 'x')
 			orientation = HORIZONTAL, onlyOne = 0;
 
-	if (position.X < PLAYGROUND_SIZE)
+	if (position.X + 1 < PLAYGROUND_SIZE)
 		if (p[position.Y][position.X + 1] == '#' || p[position.Y][position.X + 1] == 'x')
 			orientation = HORIZONTAL, onlyOne = 0;
-
-	if (onlyOne)
-		return true;
 
 	COORD ship[MAX_SIZE_OF_SHIP];
 	int shipSize = 1;
 	ship[0] = position;
 
-	if (orientation == HORIZONTAL) {
+	if (!onlyOne) {
 
-		for (int i = 1; position.X < PLAYGROUND_SIZE && shipSize < MAX_SIZE_OF_SHIP &&
-			p[position.Y][position.X + i] != ' ' && p[position.Y][position.X + i] != 'o'; i++)
-		{
-			ship[shipSize] = { (short)(position.X + i), position.Y };
-			++shipSize;
+		if (orientation == HORIZONTAL) {
+
+			for (int i = 1; position.X < PLAYGROUND_SIZE && shipSize < MAX_SIZE_OF_SHIP &&
+				p[position.Y][position.X + i] != ' ' && p[position.Y][position.X + i] != 'o'; i++)
+			{
+				ship[shipSize] = { (short)(position.X + i), position.Y };
+				++shipSize;
+			}
+
+			for (int i = 1; position.X > 0 && shipSize < MAX_SIZE_OF_SHIP &&
+				p[position.Y][position.X - i] != ' ' && p[position.Y][position.X - i] != 'o'; i++)
+			{
+				ship[shipSize] = { (short)(position.X - i), position.Y };
+				++shipSize;
+			}
 		}
 
-		for (int i = 1; position.X > 0 && shipSize < MAX_SIZE_OF_SHIP &&
-			p[position.Y][position.X - i] != ' ' && p[position.Y][position.X - i] != 'o'; i++)
-		{
-			ship[shipSize] = { (short)(position.X - i), position.Y };
-			++shipSize;
+		if (orientation == VERTICAL) {
+
+			for (int i = 1; position.Y < PLAYGROUND_SIZE && shipSize < MAX_SIZE_OF_SHIP &&
+				p[position.Y + i][position.X] != ' ' && p[position.Y + i][position.X] != 'o'; i++)
+			{
+				ship[shipSize] = { position.X, (short)(position.Y + i) };
+				++shipSize;
+			}
+
+			for (int i = 1; position.Y > 0 && shipSize < MAX_SIZE_OF_SHIP &&
+				p[position.Y - i][position.X] != ' ' && p[position.Y - i][position.X] != 'o'; i++)
+			{
+				ship[shipSize] = { position.X, (short)(position.Y - i) };
+				++shipSize;
+			}
 		}
+
+		for (int i = 0; i < shipSize; ++i)
+			if (p[ship[i].Y][ship[i].X] == '#')
+				return false;
 	}
-
-	if (orientation == VERTICAL) {
-
-		for (int i = 1; position.Y < PLAYGROUND_SIZE && shipSize < MAX_SIZE_OF_SHIP &&
-			p[position.Y + i][position.X] != ' ' && p[position.Y + i][position.X] != 'o'; i++)
-		{
-			ship[shipSize] = { position.X, (short)(position.Y + i) };
-			++shipSize;
-		}
-
-		for (int i = 1; position.Y > 0 && shipSize < MAX_SIZE_OF_SHIP &&
-			p[position.Y - i][position.X] != ' ' && p[position.Y - i][position.X] != 'o'; i++)
-		{
-			ship[shipSize] = { position.X, (short)(position.Y - i) };
-			++shipSize;
-		}
-	}
-
-	for (int i = 0; i < shipSize; ++i)
-		if (p[ship[i].Y][ship[i].X] == '#')
-			return false;
 
 	markAroundAsEmpty(shipSize, orientation, ship, p, who);
 	return true;
-
 }
 
-void markAroundAsEmpty(int n, bool orientation, COORD ship[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUND_SIZE], int who)
+void markAroundAsEmpty(int shipSize, bool orientation, COORD ship[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUND_SIZE], int who)
 {
-	sortCoordinates(n, orientation, ship);
+	if (shipSize > 1)
+		sortCoordinates(shipSize, orientation, ship);
 
 	int indent = 0;
 	if (who == PC)
 		indent = PLAYER_X;
 
 	if (orientation == HORIZONTAL) {
-		int xStart = 0, xFinish = ship[0].X + n;
+		
+		int xStart = 0, xFinish = ship[0].X + shipSize;
 
 		if (ship[0].X > 0) {
 			p[ship[0].Y][ship[0].X - 1] = 'o';
@@ -198,9 +199,9 @@ void markAroundAsEmpty(int n, bool orientation, COORD ship[MAX_SIZE_OF_SHIP], ch
 			--xStart;
 		}
 
-		if (ship[n - 1].X < PLAYGROUND_SIZE) {
-			p[ship[n - 1].Y][ship[n - 1].X + 1] = 'o';
-			setCursor({ (short)(ship[n - 1].X + 1 + indent + 2), (short)(ship[n - 1].Y + HEADER_Y + 2) });
+		if (ship[shipSize - 1].X + 1 < PLAYGROUND_SIZE) {
+			p[ship[shipSize - 1].Y][ship[shipSize - 1].X + 1] = 'o';
+			setCursor({ (short)(ship[shipSize - 1].X + 1 + indent + 2), (short)(ship[shipSize - 1].Y + HEADER_Y + 2) });
 			printf("o");
 			++xFinish;
 		}
@@ -212,7 +213,7 @@ void markAroundAsEmpty(int n, bool orientation, COORD ship[MAX_SIZE_OF_SHIP], ch
 				printf("o");
 			}
 
-		if (ship[0].Y < PLAYGROUND_SIZE)
+		if (ship[0].Y + 1 < PLAYGROUND_SIZE)
 			for (int i = ship[0].X + xStart; i < xFinish; ++i) {
 				p[ship[0].Y + 1][i] = 'o';
 				setCursor({ (short)(i + indent + 2) , (short)(ship[0].Y + 1 + HEADER_Y + 2) });
@@ -222,7 +223,7 @@ void markAroundAsEmpty(int n, bool orientation, COORD ship[MAX_SIZE_OF_SHIP], ch
 
 	if (orientation == VERTICAL) {
 
-		int yStart = 0, yFinish = ship[0].Y + n;
+		int yStart = 0, yFinish = ship[0].Y + shipSize;
 
 		if (ship[0].Y > 0) {
 			p[ship[0].Y - 1][ship[0].X] = 'o';
@@ -231,9 +232,9 @@ void markAroundAsEmpty(int n, bool orientation, COORD ship[MAX_SIZE_OF_SHIP], ch
 			--yStart;
 		}
 
-		if (ship[n - 1].Y < PLAYGROUND_SIZE) {
-			p[ship[n - 1].Y + 1][ship[n - 1].X] = 'o';
-			setCursor({ (short)(ship[n - 1].X + indent + 2), (short)(ship[n - 1].Y + 1 + HEADER_Y + 2) });
+		if (ship[shipSize - 1].Y < PLAYGROUND_SIZE) {
+			p[ship[shipSize - 1].Y + 1][ship[shipSize - 1].X] = 'o';
+			setCursor({ (short)(ship[shipSize - 1].X + indent + 2), (short)(ship[shipSize - 1].Y + 1 + HEADER_Y + 2) });
 			printf("o");
 			++yFinish;
 		}
