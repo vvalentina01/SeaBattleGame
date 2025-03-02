@@ -5,7 +5,7 @@
 #include "Windows.h"
 
 bool shootTrying(char (*p)[PLAYGROUND_SIZE], COORD position);
-bool playerShoot(char (*p)[PLAYGROUND_SIZE]);
+bool playerShoot(char (*p)[PLAYGROUND_SIZE], COORD& position);
 int isGameOver(char (*player)[PLAYGROUND_SIZE], char (*pc)[PLAYGROUND_SIZE]);
 bool pcShoot(char (*p)[PLAYGROUND_SIZE], COORD* variations, int &varSize, notDestroyedShip& nds);
 bool isShipDestroyed(COORD position, char (*p)[PLAYGROUND_SIZE], int who);

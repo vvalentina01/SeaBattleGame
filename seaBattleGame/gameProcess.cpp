@@ -27,18 +27,14 @@ bool shootTrying(char (*p)[PLAYGROUND_SIZE], COORD position)
 	}
 }
 
-bool playerShoot(char (*p)[PLAYGROUND_SIZE]) {
-
-	COORD position;
-	position.X = 2;
-	position.Y = HEADER_Y + 2;
+bool playerShoot(char (*p)[PLAYGROUND_SIZE], COORD& position) {
 
 	char c = 0;
 	setCursor(position);
 	do
 	{
 		c = inputCoordinates(&position, PC);
-		if (c == 32) {
+		if (c == 32 && p[position.Y - HEADER_Y - 2][position.X - 2] != 'x' && p[position.Y - HEADER_Y - 2][position.X - 2] != 'o') {
 			bool result = shootTrying(p, { (short)(position.X - 2), (short)(position.Y - HEADER_Y - 2) });
 			resultOfMove(result, { (short)(position.X - 2), (short)(position.Y - HEADER_Y - 2) }, PLAYER, p);
 			return result;

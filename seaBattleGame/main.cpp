@@ -118,6 +118,7 @@ int main()
 	return 0; // add comment to user
 
 	notDestroyedShip nds{};
+	COORD currentPosition = { 2, HEADER_Y + 2 };
 
 	for (short i = 0; i < PLAYGROUND_SIZE; ++i)
 		for (short j = 0; j < PLAYGROUND_SIZE; ++j)
@@ -135,7 +136,7 @@ int main()
 		bool playerMove = true;
 
 		while (playerMove) {
-			playerMove = playerShoot(pcPlayground);
+			playerMove = playerShoot(pcPlayground, currentPosition);
 			for (int i = 3; i < 7; ++i) {
 				setCursor({ 0, (short)i });
 				printf(EMPTY_STRING);
