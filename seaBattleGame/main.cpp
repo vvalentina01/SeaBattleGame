@@ -23,7 +23,7 @@ char startMenu() {
 	printf("\t* - Continue Last Game\n");
 	printf("\n");
 	printf("use W and S to move\n");
-	printf("ise ENTER to shoose\n");
+	printf("use ENTER to choose\n");
 	char isNewGame = -1;
 	COORD position = { 8, 1 };
 	setCursor(position);
@@ -45,7 +45,7 @@ char startMenu() {
 			setCursor(position);
 			isNewGame = -1;
 			break;
-		case 13:    // enter
+		case ENTER:    
 			isNewGame = position.Y + '0';
 			break;
 		default:
@@ -69,7 +69,7 @@ void cleanScreen(int n)
 
 int main()
 {
-	system("Color 70");
+	system(BLACK_TEXT_ON_WHITE_BACKGROUND);
 	setlocale(LC_ALL, "Ru");
 	srand(time(NULL));
 
