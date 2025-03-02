@@ -16,13 +16,13 @@ bool shootTrying(char (*p)[PLAYGROUND_SIZE], COORD position)
 {
 	if (p[position.Y][position.X] == '#') {
 		p[position.Y][position.X] = 'x';
-		printf("x");
-		//реализовать проверку
+
+		printColorSymbol(HIT);
 		return true;
 	}
 	else {
 		p[position.Y][position.X] = 'o';
-		printf("o");
+		printColorSymbol(MISS);
 		return false;
 	}
 }
@@ -92,13 +92,13 @@ bool pcShoot(char (*p)[PLAYGROUND_SIZE], COORD* variations, int& varSize, notDes
 
 	if (p[position.Y][position.X] == ' ') {
 		p[position.Y][position.X] = 'o';
-		printf("o");
+		printColorSymbol(MISS);
 		result = 0;
 	}
 
 	if (p[position.Y][position.X] == '#') {
 		p[position.Y][position.X] = 'x';
-		printf("x");
+		printColorSymbol(HIT);
 		result = 1;
 	}
 	resultOfMove(result, position, PC, p);
@@ -195,14 +195,14 @@ void markAroundAsEmpty(int shipSize, bool orientation, COORD ship[MAX_SIZE_OF_SH
 		if (ship[0].X > 0) {
 			p[ship[0].Y][ship[0].X - 1] = 'o';
 			setCursor({ (short)(ship[0].X - 1 + indent + 2),  (short)(ship[0].Y + HEADER_Y + 2) });
-			printf("o");
+			printColorSymbol(MISS);
 			--xStart;
 		}
 
 		if (ship[shipSize - 1].X + 1 < PLAYGROUND_SIZE) {
 			p[ship[shipSize - 1].Y][ship[shipSize - 1].X + 1] = 'o';
 			setCursor({ (short)(ship[shipSize - 1].X + 1 + indent + 2), (short)(ship[shipSize - 1].Y + HEADER_Y + 2) });
-			printf("o");
+			printColorSymbol(MISS);
 			++xFinish;
 		}
 
@@ -210,14 +210,14 @@ void markAroundAsEmpty(int shipSize, bool orientation, COORD ship[MAX_SIZE_OF_SH
 			for (int i = ship[0].X + xStart; i < xFinish; ++i) {
 				p[ship[0].Y - 1][i] = 'o';
 				setCursor({ (short)(i + indent + 2), (short)(ship[0].Y - 1 + HEADER_Y + 2) });
-				printf("o");
+				printColorSymbol(MISS);
 			}
 
 		if (ship[0].Y + 1 < PLAYGROUND_SIZE)
 			for (int i = ship[0].X + xStart; i < xFinish; ++i) {
 				p[ship[0].Y + 1][i] = 'o';
 				setCursor({ (short)(i + indent + 2) , (short)(ship[0].Y + 1 + HEADER_Y + 2) });
-				printf("o");
+				printColorSymbol(MISS);
 			}
 	}
 
@@ -228,14 +228,14 @@ void markAroundAsEmpty(int shipSize, bool orientation, COORD ship[MAX_SIZE_OF_SH
 		if (ship[0].Y > 0) {
 			p[ship[0].Y - 1][ship[0].X] = 'o';
 			setCursor({ (short)(ship[0].X + indent + 2),  (short)(ship[0].Y - 1 + HEADER_Y + 2) });
-			printf("o");
+			printColorSymbol(MISS);
 			--yStart;
 		}
 
 		if (ship[shipSize - 1].Y < PLAYGROUND_SIZE) {
 			p[ship[shipSize - 1].Y + 1][ship[shipSize - 1].X] = 'o';
 			setCursor({ (short)(ship[shipSize - 1].X + indent + 2), (short)(ship[shipSize - 1].Y + 1 + HEADER_Y + 2) });
-			printf("o");
+			printColorSymbol(MISS);
 			++yFinish;
 		}
 
@@ -243,14 +243,14 @@ void markAroundAsEmpty(int shipSize, bool orientation, COORD ship[MAX_SIZE_OF_SH
 			for (int i = ship[0].Y + yStart; i < yFinish; ++i) {
 				p[i][ship[0].X - 1] = 'o';
 				setCursor({ (short)(ship[0].X - 1 + indent + 2), (short)(i + HEADER_Y + 2) });
-				printf("o");
+				printColorSymbol(MISS);
 			}
 
 		if (ship[0].X < PLAYGROUND_SIZE)
 			for (int i = ship[0].Y + yStart; i < yFinish; ++i) {
 				p[i][ship[0].X + 1] = 'o';
 				setCursor({ (short)(ship[0].X + 1 + indent + 2) , (short)(i + HEADER_Y + 2) });
-				printf("o");
+				printColorSymbol(MISS);
 			}
 	}
 
