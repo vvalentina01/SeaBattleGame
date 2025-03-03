@@ -80,7 +80,7 @@ void createShip(int n, char (*p)[PLAYGROUND_SIZE])
 
 	for (int i = 0; i < n; i++)
 	{
-		p[ship[i].X][ship[i].Y] = '#';
+		p[ship[i].Y][ship[i].X] = '#';
 	}
 }
 
@@ -106,7 +106,7 @@ bool checkoutBeside(int x, int y, char (*p)[PLAYGROUND_SIZE])
 		{
 			if (i >= 0 && i < PLAYGROUND_SIZE && j >= 0 && j < PLAYGROUND_SIZE)
 			{
-				beside[k] = p[i][j];
+				beside[k] = p[j][i];
 			}
 			if (beside[k] == '#')
 			{
@@ -120,56 +120,26 @@ bool checkoutBeside(int x, int y, char (*p)[PLAYGROUND_SIZE])
 
 int inputNewShip(COORD (*ship)[MAX_SIZE_OF_SHIP], COORD &position)
 {
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	
 	int i = 0;
 	char c = 0;
-	SetConsoleCursorPosition(hStdout, position);
+	setCursor(position);
 	while (c != 13 && i <= MAX_SIZE_OF_SHIP)
 	{
-		c = _getch();
-		switch (c) {
-		case 'w':
-		case 'W':
-			if (position.Y > HEADER_Y + 2)
-				--position.Y;
-			else
-				position.Y += PLAYGROUND_SIZE - 1;
-			SetConsoleCursorPosition(hStdout, position);
-			break;
-		case 's':
-		case 'S':
-			if (position.Y < HEADER_Y + 2 + PLAYGROUND_SIZE - 1)
-				++position.Y;
-			else
-				position.Y -= PLAYGROUND_SIZE - 1;
-			SetConsoleCursorPosition(hStdout, position);
-			break;
-		case 'd':
-		case 'D':
-			if (position.X < PLAYER_X + 2 + PLAYGROUND_SIZE - 1)
-				++position.X;
-			else
-				position.X -= PLAYGROUND_SIZE - 1;
-			SetConsoleCursorPosition(hStdout, position);
-			break;
-		case 'a':
-		case 'A':
-			if (position.X > PLAYER_X + 2)
-				--position.X;
-			else
-				position.X += PLAYGROUND_SIZE - 1;
-			SetConsoleCursorPosition(hStdout, position);
-			break;
-		case 32:    // space				
+		c = inputCoordinates(&position, PLAYER);
+
+		if (c == 32)
+		{
 			printf("#");
-			(*ship)[i].X = position.X - PLAYER_X - 2;
+  			(*ship)[i].X = position.X - PLAYER_X - 2;
 			(*ship)[i].Y = position.Y - HEADER_Y - 2;
 			if (position.X < PLAYER_X + 2 + PLAYGROUND_SIZE - 1)
 				++position.X;
-			SetConsoleCursorPosition(hStdout, position);
+			setCursor(position);
 			++i;
-			break;
-		case 8:    // backspace
+		}
+
+		if (c == 8) {
 			printf(" ");
 			(*ship)[i].X = position.X - PLAYER_X - 2;
 			(*ship)[i].Y = position.Y - HEADER_Y - 2;
@@ -214,7 +184,6 @@ bool checkoutPlayerShip(int n, COORD ship[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUN
 
 void createPlayerPlayground(char (*p)[PLAYGROUND_SIZE])
 {
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	int countOfEveryShipTypes[] = { 4, 3, 2, 1 };
 	COORD ship[MAX_SIZE_OF_SHIP] = {};
 	COORD position = { PLAYER_X + 2 , HEADER_Y + 2 };
@@ -229,23 +198,23 @@ void createPlayerPlayground(char (*p)[PLAYGROUND_SIZE])
 		if (countOfEveryShipTypes[n - 1] > 0 && checkoutPlayerShip(n, ship, p) && checkoutShip(n, ship, p))
 		{
 			for (int j = 0; j < n; ++j)
-				p[ship[j].X][ship[j].Y] = '#';
+				p[ship[j].Y][ship[j].X] = '#';
 			--countOfEveryShipTypes[n - 1];
-			SetConsoleCursorPosition(hStdout, { 0, 0 });
+			setCursor({ 0, 0 });
 			printf(EMPTY_STRING);
-			SetConsoleCursorPosition(hStdout, { 0, 0 });
+			setCursor({ 0, 0 });
 			printf("Ship (type-%d) was added!", n);
 			printInstructions(n - 1, countOfEveryShipTypes[n - 1]);
 		}
 		else {
-			SetConsoleCursorPosition(hStdout, { 0, 0 });
+			setCursor({ 0, 0 });
 			printf(EMPTY_STRING);
-			SetConsoleCursorPosition(hStdout, { 0, 0 });
+			setCursor({ 0, 0 });
 			printf("Uncorrect!                ");
 			for (int j = 0; j < n; ++j)
 			{
-				SetConsoleCursorPosition(hStdout, { short(ship[j].X + PLAYER_X + 2), short(ship[j].Y + HEADER_Y + 2) });
-				if (p[ship[j].X][ship[j].Y] != '#')
+				setCursor({ short(ship[j].X + PLAYER_X + 2), short(ship[j].Y + HEADER_Y + 2) });
+				if (p[ship[j].Y][ship[j].X] != '#')
 					printf(" ");
 			}
 		}
@@ -259,18 +228,17 @@ void createPlayerPlayground(char (*p)[PLAYGROUND_SIZE])
 
 
 void printInstructions(short type, int n) {
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	int countOfEveryShipTypes[] = { 4, 3, 2, 1 };
 	char typeOfShips[][MAX_SIZE_OF_SHIP + 1] = {"#", "##", "###", "####"};
 
 	if (type == -1) {
-		SetConsoleCursorPosition(hStdout, { 0, HEADER_Y });
+		setCursor({ 0, HEADER_Y });
 		printf("Available ships:\n");
 		for (int i = 0; i < MAX_SIZE_OF_SHIP; ++i)
 			printf("\t%s - %d\n", typeOfShips[i], countOfEveryShipTypes[i]);
 	}
 	else {
-		SetConsoleCursorPosition(hStdout, { 0, (short)(HEADER_Y + type + 1)});
+		setCursor({ 0, (short)(HEADER_Y + type + 1)});
 		printf("\t%s - %d\n", typeOfShips[type], n);
 	}
 }

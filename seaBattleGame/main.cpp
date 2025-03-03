@@ -1,26 +1,8 @@
-// ������� ���
-// 1. ������� ���� ���� (���������� �������)
-// 1.1.0 ��������� ����� �� ������ ����
-// 1.1.1. ��������� �� ����� (�������� � ��������� � ����)
-// 1.2. ��� �������� ����, ����� ������� ���������� "������" ��������
-// 2. ���� ����
-// 2.1. ��������� ����
-// 2.2. ���� ���� ��������.
-// 2.2.1. ���� � ����������
-// 2.2.2. ����������� ������ �� ������� � ������� ������ ���������� � ��������� �����-������ ������ (�-� ������)
-// � 1 
-//printf("%s\n", field[i]);
-//char field[11][12]
-// 1234567890 |  1234567890 
-//� 		  | � 		  
-//B #		  | B #	!	  
-//...
-
-
 #pragma execution_character_set("utf-8")
 #define  _CRT_SECURE_NO_WARNINGS 
 
 #include "Constants.h"
+#include "gameProcess.h"
 #include "PlaygroundCreating.h"
 #include "Utils.h"
 
@@ -28,6 +10,7 @@
 #include <locale.h>  
 #include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "Windows.h"
 
 
@@ -41,10 +24,9 @@ char startMenu() {
 	printf("\n");
 	printf("use W and S to move\n");
 	printf("ise ENTER to shoose\n");
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	char isNewGame = -1;
 	COORD position = { 8, 1 };
-	SetConsoleCursorPosition(hStdout, position);
+	setCursor(position);
 	do {
 
 		isNewGame = _getch();
@@ -53,14 +35,14 @@ char startMenu() {
 		case 'W':
 			if (position.Y > 1)
 				--position.Y;
-			SetConsoleCursorPosition(hStdout, position);
+			setCursor(position);
 			isNewGame = -1;
 			break;
 		case 's':
 		case 'S':
 			if (position.Y < 2)
 				++position.Y;
-			SetConsoleCursorPosition(hStdout, position);
+			setCursor(position);
 			isNewGame = -1;
 			break;
 		case 13:    // enter
@@ -74,12 +56,11 @@ char startMenu() {
 	return isNewGame;
 }
 
-void cleanHeader()
+void cleanScreen(int n)
 {
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	for (int i = 0; i < HEADER_Y; ++i)
+	for (int i = 0; i < n; ++i)
 	{
-		SetConsoleCursorPosition(hStdout, { 0, (short)i });
+		setCursor({ 0, (short)i });
 		printf(EMPTY_STRING);
 	}
 }
@@ -90,7 +71,6 @@ int main()
 {
 	setlocale(LC_ALL, "Ru");
 	srand(time(NULL));
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	char pcPlayground[PLAYGROUND_SIZE][PLAYGROUND_SIZE];
 	char playerPlayground[PLAYGROUND_SIZE][PLAYGROUND_SIZE];
@@ -103,24 +83,89 @@ int main()
 	}
 
 	char isNewGame = startMenu();
-	cleanHeader();
+	cleanScreen(HEADER_Y);
 	if (isNewGame == NEW_GAME) {
-		SetConsoleCursorPosition(hStdout, { 0, 3 });
+		setCursor({ 0, 3 });
 		printf("Set your ships:\n");
 		printf("\tWASD - move\n");
 		printf("\tSPACE - add part of a ship\n");
 		printf("\tENTER - finish adding a ship");
 
 		createPlayerPlayground(playerPlayground);
-		cleanHeader();
-		SetConsoleCursorPosition(hStdout, { 0, 0});
-		printf("\tGame is started\t");
-
+		createPCPlayground(pcPlayground);
 	}
 
 	if (isNewGame == CONTINUE_LAST_GAME) {
-
+		loadPlayground(playerPlayground, PLAYER);
+		loadPlayground(pcPlayground, PC);
 	}
-	
-	SetConsoleCursorPosition(hStdout, { 0, 25 });
+
+	cleanScreen(25);
+
+	printPlayground(pcPlayground, PC);
+	printPlayground(playerPlayground, PLAYER);
+	setCursor({ 0, 0 });
+	printf("\tGame is started\t");
+	setCursor({ 0, 25 });
+
+	int roundCounter = 1;
+	int gameStatus = NOT_OVER;
+
+	int varSize = PLAYGROUND_SIZE * PLAYGROUND_SIZE;
+	COORD* variations = (COORD*)malloc(varSize * sizeof(COORD));
+
+	if (variations == NULL)
+	return 0; // add comment to user
+
+	notDestroyedShip nds{};
+	COORD currentPosition = { 2, HEADER_Y + 2 };
+
+	for (short i = 0; i < PLAYGROUND_SIZE; ++i)
+		for (short j = 0; j < PLAYGROUND_SIZE; ++j)
+			variations[i * PLAYGROUND_SIZE + j] = { i, j };
+
+	while (gameStatus == NOT_OVER) { 
+
+		setCursor({ 0, 1 });
+		printf("Round %d: ", roundCounter);
+
+		setCursor({ 0, 2 });
+		printf("PLAYER MOVE");
+
+
+		bool playerMove = true;
+
+		while (playerMove) {
+			playerMove = playerShoot(pcPlayground, currentPosition);
+			for (int i = 3; i < 7; ++i) {
+				setCursor({ 0, (short)i });
+				printf(EMPTY_STRING);
+			}
+		}
+
+		gameStatus = isGameOver(playerPlayground, pcPlayground);
+
+		if (gameStatus == NOT_OVER) {
+
+			setCursor({ 0, 2 });
+			printf(EMPTY_STRING);
+			setCursor({ 0, 2 });
+			printf("PC MOVE");
+
+			bool pcMove = true;
+
+			while (pcMove) {
+				pcMove = pcShoot(playerPlayground, variations, varSize, nds);
+				for (int i = 3; i < 7; ++i) {
+					setCursor({ 0, (short)i });
+					printf(EMPTY_STRING);
+				}
+			}
+
+			gameStatus = isGameOver(playerPlayground, pcPlayground);
+		}
+
+		++roundCounter;
+	}
+
 }

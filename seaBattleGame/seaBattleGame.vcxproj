@@ -19,12 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="gameProcess.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlaygroundCreating.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="gameProcess.h" />
     <ClInclude Include="PlaygroundCreating.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Windows.h"
+
 const int PLAYGROUND_SIZE = 10;
 const char ALPHABET_HEADER[] = "ABCDEFGHIJ";
 const int NUMERIC_HEADER[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
@@ -25,3 +27,18 @@ const char EMPTY_STRING[] = "                                                   
 
 const char NEW_GAME = '1';
 const char CONTINUE_LAST_GAME = '2';
+
+const int WIN = 1;
+const int LOSE = 0;
+const int NOT_OVER = -1;
+
+struct notDestroyedShip {
+	bool exists;
+	COORD ship[MAX_SIZE_OF_SHIP];
+	int shipSize;
+	bool orientation;
+	COORD variations[MAX_SIZE_OF_SHIP];
+	int varCount;
+	COORD nextMove;
+};
+

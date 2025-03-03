@@ -2,7 +2,9 @@
 
 #include "Constants.h"
 #include "PlaygroundCreating.h"
+#include "Utils.h"
 
+#include <conio.h>
 #include <locale.h>  
 #include <stdio.h> 
 #include <stdlib.h>
@@ -34,7 +36,6 @@ bool loadPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 {
 	FILE* f;
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD position;
 
 
@@ -43,27 +44,27 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 	{
 		f = fopen(PATH_PLAYER, "r");
 		position.X = PLAYER_X;
-		SetConsoleCursorPosition(hStdout, position);
+		setCursor(position);
 		printf("\t%s", HEADER_PLAYER);
 	}
 	else
 	{
 		f = fopen(PATH_PC, "r");
 		position.X = 0;
-		SetConsoleCursorPosition(hStdout, position);
-		printf("\t%s", HEADER_PC);
+		setCursor(position);
+		printf("%s", HEADER_PC);
 	}
 
 	position.Y = HEADER_Y;
 
-	SetConsoleCursorPosition(hStdout, position);
+	setCursor(position);
 	printf("  ");
 	printf(ALPHABET_HEADER);
 	++position.Y;
-	SetConsoleCursorPosition(hStdout, position);
+	setCursor(position);
 	printf("  ----------");
 	++position.Y;
-	SetConsoleCursorPosition(hStdout, position);
+	setCursor(position);
 	for (int i = 0; i < PLAYGROUND_SIZE; i++)
 	{
 		printf("%d|", NUMERIC_HEADER[i]);
@@ -77,7 +78,7 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 		}
 		printf("|");
 		++position.Y;
-		SetConsoleCursorPosition(hStdout, position);
+		setCursor(position);
 	}
 	printf("  ----------");
 
@@ -106,4 +107,52 @@ bool savePlayground(char (*p)[PLAYGROUND_SIZE], bool who)
 
 	fclose(f);
 	return true;
+}
+
+void setCursor(COORD position) {
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorPosition(hStdout, position);
+}
+
+char inputCoordinates(COORD* position, int who) {
+	int indent = 0;
+	if (who != PC)
+		indent = PLAYER_X;
+	char c = _getch();
+	switch (c) {
+	case 'w':
+	case 'W':
+		if ((*position).Y > HEADER_Y + 2)
+			--(*position).Y;
+		else
+			(*position).Y += PLAYGROUND_SIZE - 1;
+		setCursor((*position));
+		break;
+	case 's':
+	case 'S':
+		if ((*position).Y < HEADER_Y + 2 + PLAYGROUND_SIZE - 1)
+			++(*position).Y;
+		else
+			(*position).Y -= PLAYGROUND_SIZE - 1;
+		setCursor((*position));
+		break;
+	case 'd':
+	case 'D':
+		if ((*position).X < indent + 2 + PLAYGROUND_SIZE - 1)
+			++(*position).X;
+		else
+			(*position).X -= PLAYGROUND_SIZE - 1;
+		setCursor((*position));
+		break;
+	case 'a':
+	case 'A':
+		if ((*position).X > indent + 2)
+			--(*position).X;
+		else
+			(*position).X += PLAYGROUND_SIZE - 1;
+		setCursor((*position));
+		break;
+	default: 
+		return c;
+	}
 }
