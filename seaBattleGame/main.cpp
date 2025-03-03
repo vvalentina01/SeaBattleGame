@@ -69,6 +69,7 @@ void cleanScreen(int n)
 
 int main()
 {
+	system("Color 70");
 	setlocale(LC_ALL, "Ru");
 	srand(time(NULL));
 

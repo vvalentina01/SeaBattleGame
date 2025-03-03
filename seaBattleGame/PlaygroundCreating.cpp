@@ -130,19 +130,19 @@ int inputNewShip(COORD (*ship)[MAX_SIZE_OF_SHIP], COORD &position)
 
 		if (c == 32)
 		{
-			printf("#");
   			(*ship)[i].X = position.X - PLAYER_X - 2;
 			(*ship)[i].Y = position.Y - HEADER_Y - 2;
 			if (position.X < PLAYER_X + 2 + PLAYGROUND_SIZE - 1)
+			printColorSymbol(PART_OF_SHIP);
 				++position.X;
 			setCursor(position);
 			++i;
 		}
 
 		if (c == 8) {
-			printf(" ");
 			(*ship)[i].X = position.X - PLAYER_X - 2;
 			(*ship)[i].Y = position.Y - HEADER_Y - 2;
+			printColorSymbol(EMPTY_SPACE);
 			break;
 		}
 	}

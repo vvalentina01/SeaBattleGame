@@ -32,6 +32,16 @@ const int WIN = 1;
 const int LOSE = 0;
 const int NOT_OVER = -1;
 
+const char HIT = 'x';
+const char MISS = 'o';
+const char PART_OF_SHIP = '#';
+const char EMPTY_SPACE = ' ';
+
+const int RED_ON_WHITE = 4 + 7 * 16;
+const int GREEN_ON_WHITE = 2 + 7 * 16;
+const int CLASSIC = 7 * 16;
+const int LIGHT_YELLOW = 6 + 6 * 16;
+
 struct notDestroyedShip {
 	bool exists;
 	COORD ship[MAX_SIZE_OF_SHIP];

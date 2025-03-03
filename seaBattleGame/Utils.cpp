@@ -71,9 +71,9 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 		for (int j = 0; j < PLAYGROUND_SIZE; j++)
 		{
 			if (who == NEW_PLAYER || who == PC && p[i][j] == '#')
-				printf(" ");
+				printColorSymbol(EMPTY_SPACE);
 			else
-				printf("%c", p[i][j]);
+				printColorSymbol(p[i][j]);
 
 		}
 		printf("|");
@@ -155,4 +155,24 @@ char inputCoordinates(COORD* position, int who) {
 	default: 
 		return c;
 	}
+}
+
+void printColorSymbol(char symbol)
+{
+	switch (symbol) {
+		case HIT:
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED_ON_WHITE);
+			break;
+		case MISS:
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHT_YELLOW);
+			break;
+		case PART_OF_SHIP:
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), GREEN_ON_WHITE);
+			break;
+		default:
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), CLASSIC);
+			break;
+	}	
+	printf("%c", symbol);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), CLASSIC);
 }
