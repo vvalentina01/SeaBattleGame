@@ -27,7 +27,6 @@ bool shootTrying(char (*p)[PLAYGROUND_SIZE], COORD position)
 }
 
 bool playerShoot(char (*p)[PLAYGROUND_SIZE], COORD& position) {
-
 	char c = 0;
 	setCursor(position);
 	do
@@ -54,13 +53,10 @@ int isGameOver(char (*player)[PLAYGROUND_SIZE], char (*pc)[PLAYGROUND_SIZE]) {
 				pcIsLoser = 0;
 		}
 	}
-
 	if (playerIsLoser)
 		return LOSE;
-
 	if (pcIsLoser)
 		return WIN;
-
 	return NOT_OVER;
 }
 
@@ -68,7 +64,6 @@ bool pcShoot(char (*p)[PLAYGROUND_SIZE], COORD* variations, int& varSize, notDes
 
 	COORD position;
 	bool result = 0;
-	
 		if (nds.exists)
 		{
 			position = nds.nextMove;
@@ -87,7 +82,6 @@ bool pcShoot(char (*p)[PLAYGROUND_SIZE], COORD* variations, int& varSize, notDes
 			--varSize;
 		}
 
-
 	setCursor({ (short)(position.X + PLAYER_X + BORDERS), (short)(position.Y + HEADER_Y + BORDERS) });
 
 	if (p[position.Y][position.X] == EMPTY_SPACE) {
@@ -95,12 +89,12 @@ bool pcShoot(char (*p)[PLAYGROUND_SIZE], COORD* variations, int& varSize, notDes
 		printColorSymbol(MISS);
 		result = 0;
 	}
-
 	if (p[position.Y][position.X] == PART_OF_SHIP) {
 		p[position.Y][position.X] = HIT;
 		printColorSymbol(HIT);
 		result = 1;
 	}
+
 	resultOfMove(result, position, PC, p);
 	bool shipStatus = false;
 	if (result)
@@ -135,16 +129,13 @@ bool isShipDestroyed(COORD position, char (*p)[PLAYGROUND_SIZE], int who) {
 	ship[0] = position;
 
 	if (!onlyOne) {
-
 		if (orientation == HORIZONTAL) {
-
 			for (int i = 1; position.X < PLAYGROUND_SIZE && shipSize < MAX_SIZE_OF_SHIP &&
 				p[position.Y][position.X + i] != EMPTY_SPACE && p[position.Y][position.X + i] != MISS; i++)
 			{
 				ship[shipSize] = { (short)(position.X + i), position.Y };
 				++shipSize;
 			}
-
 			for (int i = 1; position.X > 0 && shipSize < MAX_SIZE_OF_SHIP &&
 				p[position.Y][position.X - i] != EMPTY_SPACE && p[position.Y][position.X - i] != MISS; i++)
 			{
@@ -152,7 +143,6 @@ bool isShipDestroyed(COORD position, char (*p)[PLAYGROUND_SIZE], int who) {
 				++shipSize;
 			}
 		}
-
 		if (orientation == VERTICAL) {
 
 			for (int i = 1; position.Y < PLAYGROUND_SIZE && shipSize < MAX_SIZE_OF_SHIP &&
@@ -161,7 +151,6 @@ bool isShipDestroyed(COORD position, char (*p)[PLAYGROUND_SIZE], int who) {
 				ship[shipSize] = { position.X, (short)(position.Y + i) };
 				++shipSize;
 			}
-
 			for (int i = 1; position.Y > 0 && shipSize < MAX_SIZE_OF_SHIP &&
 				p[position.Y - i][position.X] != EMPTY_SPACE && p[position.Y - i][position.X] != MISS; i++)
 			{
@@ -169,12 +158,10 @@ bool isShipDestroyed(COORD position, char (*p)[PLAYGROUND_SIZE], int who) {
 				++shipSize;
 			}
 		}
-
 		for (int i = 0; i < shipSize; ++i)
 			if (p[ship[i].Y][ship[i].X] == PART_OF_SHIP)
 				return false;
 	}
-
 	markAroundAsEmpty(shipSize, orientation, ship, p, who);
 	return true;
 }
@@ -183,22 +170,19 @@ void markAroundAsEmpty(int shipSize, bool orientation, COORD ship[MAX_SIZE_OF_SH
 {
 	if (shipSize > 1)
 		sortCoordinates(shipSize, orientation, ship);
-
 	int indent = 0;
+
 	if (who == PC)
 		indent = PLAYER_X;
 
 	if (orientation == HORIZONTAL) {
-		
 		int xStart = 0, xFinish = ship[0].X + shipSize;
-
 		if (ship[0].X > 0) {
 			p[ship[0].Y][ship[0].X - 1] = MISS;
 			setCursor({ (short)(ship[0].X - 1 + indent + BORDERS),  (short)(ship[0].Y + HEADER_Y + BORDERS) });
 			printColorSymbol(MISS);
 			--xStart;
 		}
-
 		if (ship[shipSize - 1].X + 1 < PLAYGROUND_SIZE) {
 			p[ship[shipSize - 1].Y][ship[shipSize - 1].X + 1] = MISS;
 			setCursor({ (short)(ship[shipSize - 1].X + 1 + indent + BORDERS), (short)(ship[shipSize - 1].Y + HEADER_Y + BORDERS) });
@@ -212,7 +196,6 @@ void markAroundAsEmpty(int shipSize, bool orientation, COORD ship[MAX_SIZE_OF_SH
 				setCursor({ (short)(i + indent + BORDERS), (short)(ship[0].Y - 1 + HEADER_Y + BORDERS) });
 				printColorSymbol(MISS);
 			}
-
 		if (ship[0].Y + 1 < PLAYGROUND_SIZE)
 			for (int i = ship[0].X + xStart; i < xFinish; ++i) {
 				p[ship[0].Y + 1][i] = MISS;
@@ -222,16 +205,13 @@ void markAroundAsEmpty(int shipSize, bool orientation, COORD ship[MAX_SIZE_OF_SH
 	}
 
 	if (orientation == VERTICAL) {
-
 		int yStart = 0, yFinish = ship[0].Y + shipSize;
-
 		if (ship[0].Y > 0) {
 			p[ship[0].Y - 1][ship[0].X] = MISS;
 			setCursor({ (short)(ship[0].X + indent + BORDERS),  (short)(ship[0].Y - 1 + HEADER_Y + BORDERS) });
 			printColorSymbol(MISS);
 			--yStart;
 		}
-
 		if (ship[shipSize - 1].Y + 1 < PLAYGROUND_SIZE) {
 			p[ship[shipSize - 1].Y + 1][ship[shipSize - 1].X] = MISS;
 			setCursor({ (short)(ship[shipSize - 1].X + indent + BORDERS), (short)(ship[shipSize - 1].Y + 1 + HEADER_Y + BORDERS) });
@@ -245,7 +225,6 @@ void markAroundAsEmpty(int shipSize, bool orientation, COORD ship[MAX_SIZE_OF_SH
 				setCursor({ (short)(ship[0].X - 1 + indent + BORDERS), (short)(i + HEADER_Y + BORDERS) });
 				printColorSymbol(MISS);
 			}
-
 		if (ship[0].X < PLAYGROUND_SIZE)
 			for (int i = ship[0].Y + yStart; i < yFinish; ++i) {
 				p[i][ship[0].X + 1] = MISS;
@@ -253,9 +232,7 @@ void markAroundAsEmpty(int shipSize, bool orientation, COORD ship[MAX_SIZE_OF_SH
 				printColorSymbol(MISS);
 			}
 	}
-
 	setCursor({ 0, 5 });
-
 }
 
 void resultOfMove(bool result, COORD position, int who, char (*p)[PLAYGROUND_SIZE]) {

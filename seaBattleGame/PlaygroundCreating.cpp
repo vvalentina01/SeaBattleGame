@@ -36,7 +36,6 @@ void sortCoordinates(int n, bool orientation, COORD ship[MAX_SIZE_OF_SHIP])
 
 void createPCPlayground(char (*p)[PLAYGROUND_SIZE])
 {
-
 	for (int i = MAX_SIZE_OF_SHIP; i > 0; --i)
 	{
 		for (int j = 0; j < MAX_SIZE_OF_SHIP + 1 - i; ++j)
@@ -47,11 +46,8 @@ void createPCPlayground(char (*p)[PLAYGROUND_SIZE])
 void createShip(int n, char (*p)[PLAYGROUND_SIZE])
 {
 	COORD ship[MAX_SIZE_OF_SHIP];
-
 	do {
-
 		int orientation = rand() % 2;
-
 		if (orientation == VERTICAL)
 		{
 			ship[0].X = rand() % PLAYGROUND_SIZE;
@@ -62,7 +58,6 @@ void createShip(int n, char (*p)[PLAYGROUND_SIZE])
 			ship[0].X = rand() % (PLAYGROUND_SIZE + 1 - n);
 			ship[0].Y = rand() % (PLAYGROUND_SIZE);
 		}
-
 		for (int i = 1; i < n; i++)
 		{
 			if (orientation == VERTICAL)
@@ -120,14 +115,12 @@ bool checkoutBeside(int x, int y, char (*p)[PLAYGROUND_SIZE])
 
 int inputNewShip(COORD (*ship)[MAX_SIZE_OF_SHIP], COORD &position)
 {
-	
 	int i = 0;
 	char c = 0;
 	setCursor(position);
 	while (c != ENTER && i <= MAX_SIZE_OF_SHIP)
 	{
 		c = inputCoordinates(&position, PLAYER);
-
 		if (c == SPACE)
 		{
 			printColorSymbol(PART_OF_SHIP);
@@ -138,7 +131,6 @@ int inputNewShip(COORD (*ship)[MAX_SIZE_OF_SHIP], COORD &position)
 			setCursor(position);
 			++i;
 		}
-
 		if (c == BACKSPACE) {
 			printColorSymbol(EMPTY_SPACE);
 			(*ship)[i].X = position.X - PLAYER_X - BORDERS;
@@ -194,7 +186,6 @@ void createPlayerPlayground(char (*p)[PLAYGROUND_SIZE])
 	bool done = false;
 	while (!done) {
 		n = inputNewShip(&ship, position);
-		
 		if (countOfEveryShipTypes[n - 1] > 0 && checkoutPlayerShip(n, ship, p) && checkoutShip(n, ship, p))
 		{
 			for (int j = 0; j < n; ++j)
@@ -218,7 +209,6 @@ void createPlayerPlayground(char (*p)[PLAYGROUND_SIZE])
 					printf(" ");
 			}
 		}
-
 		done = true;
 		for (int j = 0; j < MAX_SIZE_OF_SHIP; ++j)
 			if (countOfEveryShipTypes[j] != 0)
@@ -230,7 +220,6 @@ void createPlayerPlayground(char (*p)[PLAYGROUND_SIZE])
 void printInstructions(short type, int n) {
 	int countOfEveryShipTypes[] = { 4, 3, 2, 1 };
 	char typeOfShips[][MAX_SIZE_OF_SHIP + 1] = {"#", "##", "###", "####"};
-
 	if (type == -1) {
 		setCursor({ 0, HEADER_Y });
 		printf("Available ships:\n");
