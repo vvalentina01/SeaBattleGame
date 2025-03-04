@@ -44,6 +44,13 @@ void cleanScreen(int n)
 	}
 }
 
+void gameIsFailed() {
+	cleanScreen(SCREEN_SIZE);
+	setCursor({ 0, 0 });
+	printf(ERROR_MESSAGE);
+	printf(OUT_OF_MEMORY);
+}
+
 int main()
 {
 	system(BLACK_TEXT_ON_WHITE_BACKGROUND);
@@ -73,12 +80,18 @@ int main()
 	}
 
 	if (isNewGame == CONTINUE_LAST_GAME) {
-		loadPlayground(playerPlayground, PLAYER);
-		loadPlayground(pcPlayground, PC);
+		if (!loadPlayground(playerPlayground, PLAYER))
+			gameIsFailed;
+		if (!loadPlayground(pcPlayground, PC))
+			gameIsFailed;
 	}
-	cleanScreen(25);
-	printPlayground(pcPlayground, PC);
-	printPlayground(playerPlayground, PLAYER);
+	
+	cleanScreen(SCREEN_SIZE);
+	if (!printPlayground(pcPlayground, PC))
+		gameIsFailed;
+	if (!printPlayground(playerPlayground, PLAYER))
+		gameIsFailed;
+
 	setCursor({ 0, 0 });
 	printf("\tGame is started\t");
 
@@ -86,8 +99,13 @@ int main()
 	int gameStatus = NOT_OVER;
 	int varSize = PLAYGROUND_SIZE * PLAYGROUND_SIZE;
 	COORD* variations = (COORD*)malloc(varSize * sizeof(COORD));
-	if (variations == NULL)
-		return 0; // add comment to user
+	if (variations == NULL) {
+		cleanScreen(SCREEN_SIZE);
+		setCursor({ 0, 0 });
+		printf(ERROR_MESSAGE);
+		printf(OUT_OF_MEMORY);
+		return 0;
+	}
 	notDestroyedShip nds{};
 	COORD currentPosition = { 2, HEADER_Y + 2 };
 	for (short i = 0; i < PLAYGROUND_SIZE; ++i)
@@ -97,7 +115,7 @@ int main()
 	while (gameStatus == NOT_OVER) { 
 		setCursor({ 0, 1 });
 		printf("Round %d: ", roundCounter);
-		setCursor({ 0, 2 });
+		setCursor({0, 2});
 		printf("PLAYER MOVE");
 
 		int playerMove = CONTINUE_GAME;
@@ -111,6 +129,8 @@ int main()
 		if (playerMove == STOP_GAME)
 			break;
 		gameStatus = isGameOver(playerPlayground, pcPlayground);
+		if (playerMove == STOP_GAME)
+			break;
 		if (gameStatus == NOT_OVER) {
 			setCursor({ 0, 2 });
 			printf(EMPTY_STRING);

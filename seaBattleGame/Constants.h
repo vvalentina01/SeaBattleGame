@@ -18,12 +18,15 @@ const char DELETE_SYMBOL[] = "\b  ";
 
 const short HEADER_Y = 12;
 const short PLAYER_X = 30;
+const short SCREEN_SIZE = 30;
 
 const char PATH_PLAYER[] = "save/player.txt";
 const char PATH_PC[] = "save/pc.txt";
 const char HEADER_PLAYER[] = "  PLAYER  ";
 const char HEADER_PC[] = "   ENEMY   ";
 const char EMPTY_STRING[] = "                                                    ";
+const char ERROR_MESSAGE[] = "Sorry! The Game finished with ERROR";
+const char OUT_OF_MEMORY[] = "OUT OF MEMORY";
 const int BORDERS = 2;
 
 const char NEW_GAME = '1';

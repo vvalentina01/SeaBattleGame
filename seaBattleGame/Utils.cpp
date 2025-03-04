@@ -32,7 +32,7 @@ bool loadPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 	return true;
 }
 
-void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
+bool printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 {
 	FILE* f;
 	COORD position;
@@ -40,6 +40,8 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 	if (who == PLAYER || who == NEW_PLAYER)
 	{
 		f = fopen(PATH_PLAYER, "r");
+		if (f == NULL)
+			return false;
 		position.X = PLAYER_X;
 		setCursor(position);
 		printf("\t%s", HEADER_PLAYER);
@@ -47,6 +49,8 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 	else
 	{
 		f = fopen(PATH_PC, "r");
+		if (f == NULL)
+			return false;
 		position.X = 0;
 		setCursor(position);
 		printf("%s", HEADER_PC);
@@ -80,6 +84,7 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 
 	if (f != NULL)
 		fclose(f);
+	return true;
 }
 
 bool savePlayground(char (*p)[PLAYGROUND_SIZE], bool who)
