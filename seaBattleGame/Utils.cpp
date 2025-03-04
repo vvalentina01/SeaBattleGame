@@ -13,7 +13,6 @@
 bool loadPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 {
 	FILE* f;
-
 	if (who == PLAYER)
 		f = fopen(PATH_PLAYER, "r");
 	else
@@ -37,8 +36,6 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 {
 	FILE* f;
 	COORD position;
-
-
 	position.Y = HEADER_Y - 2;
 	if (who == PLAYER || who == NEW_PLAYER)
 	{
@@ -56,7 +53,6 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 	}
 
 	position.Y = HEADER_Y;
-
 	setCursor(position);
 	printf("  ");
 	printf(ALPHABET_HEADER);
@@ -89,12 +85,10 @@ void printPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 bool savePlayground(char (*p)[PLAYGROUND_SIZE], bool who)
 {
 	FILE* f;
-
 	if (who == PLAYER)
 		f = fopen(PATH_PLAYER, "wt");
 	else
 		f = fopen(PATH_PC, "wt");
-
 	if (f == NULL)
 		return false;
 	for (int y = 0; y < PLAYGROUND_SIZE; y++)
@@ -104,7 +98,6 @@ bool savePlayground(char (*p)[PLAYGROUND_SIZE], bool who)
 			fprintf(f, "%c", p[x][y]);
 		}
 	}
-
 	fclose(f);
 	return true;
 }

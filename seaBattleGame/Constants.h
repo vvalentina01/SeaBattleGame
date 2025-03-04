@@ -24,6 +24,7 @@ const char PATH_PC[] = "C:/study/projects/seaBattle 2.0/save/pc.txt";
 const char HEADER_PLAYER[] = "  PLAYER  ";
 const char HEADER_PC[] = "   ENEMY   ";
 const char EMPTY_STRING[] = "                                                    ";
+const int BORDERS = 2;
 
 const char NEW_GAME = '1';
 const char CONTINUE_LAST_GAME = '2';
@@ -41,6 +42,11 @@ const int RED_ON_WHITE = 4 + 7 * 16;
 const int GREEN_ON_WHITE = 2 + 7 * 16;
 const int CLASSIC = 7 * 16;
 const int LIGHT_YELLOW = 6 + 6 * 16;
+const char BLACK_TEXT_ON_WHITE_BACKGROUND[] = "Color 70";
+
+const int ENTER = 13;
+const int SPACE = 32;
+const int BACKSPACE = 13;
 
 struct notDestroyedShip {
 	bool exists;
