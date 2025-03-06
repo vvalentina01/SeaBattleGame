@@ -27,7 +27,7 @@ bool shootTrying(char (*p)[PLAYGROUND_SIZE], COORD position)
 	}
 }
 
-bool playerShoot(char (*p)[PLAYGROUND_SIZE], COORD& position) {
+int playerShoot(char (*p)[PLAYGROUND_SIZE], COORD& position) {
 	char c = 0;
 	setCursor(position);
 	do
@@ -36,7 +36,8 @@ bool playerShoot(char (*p)[PLAYGROUND_SIZE], COORD& position) {
 		if (c == SPACE && p[position.Y - HEADER_Y - BORDERS][position.X - BORDERS] != HIT 
 				&& p[position.Y - HEADER_Y - BORDERS][position.X - BORDERS] != MISS) {
 			bool result = shootTrying(p, { (short)(position.X - BORDERS), (short)(position.Y - HEADER_Y - BORDERS) });
-			resultOfMove(result, { (short)(position.X - BORDERS), (short)(position.Y - HEADER_Y - BORDERS) }, PLAYER, p);
+			if (!resultOfMove(result, { (short)(position.X - BORDERS), (short)(position.Y - HEADER_Y - BORDERS) }, PLAYER, p))
+				return STOP_GAME;
 			return result;
 		}
 	}
@@ -61,7 +62,7 @@ int isGameOver(char (*player)[PLAYGROUND_SIZE], char (*pc)[PLAYGROUND_SIZE]) {
 	return NOT_OVER;
 }
 
-bool pcShoot(char (*p)[PLAYGROUND_SIZE], COORD* variations, int& varSize, notDestroyedShip& nds) {
+int pcShoot(char (*p)[PLAYGROUND_SIZE], COORD* variations, int& varSize, notDestroyedShip& nds) {
 
 	COORD position;
 	bool result = 0;
@@ -96,7 +97,8 @@ bool pcShoot(char (*p)[PLAYGROUND_SIZE], COORD* variations, int& varSize, notDes
 		result = 1;
 	}
 
-	resultOfMove(result, position, PC, p);
+	if (!resultOfMove(result, position, PC, p))
+		return STOP_GAME;
 	bool shipStatus = false;
 	if (result)
 		shipStatus = isShipDestroyed(position, p, PC);
@@ -236,7 +238,7 @@ void markAroundAsEmpty(int shipSize, bool orientation, COORD ship[MAX_SIZE_OF_SH
 	setCursor({ 0, 5 });
 }
 
-void resultOfMove(bool result, COORD position, int who, char (*p)[PLAYGROUND_SIZE]) {
+bool resultOfMove(bool result, COORD position, int who, char (*p)[PLAYGROUND_SIZE]) {
 	int indentX = 0, indentY = 0;
 	setCursor({ 0, 3 });
 	if (who == PLAYER) 
@@ -254,8 +256,11 @@ void resultOfMove(bool result, COORD position, int who, char (*p)[PLAYGROUND_SIZ
 	}
 	else
 		printf("miss\n");
+	printf("\tto exit game press ESC...\n");
 	printf("\tto continue press any key... ");
-	_getch();
+	if (_getch() == ESCAPE)
+		return false;
+	return true;
 }
 
 bool strategyPC(COORD position, bool result, bool shipStatus, char (*p)[PLAYGROUND_SIZE], notDestroyedShip& nds)

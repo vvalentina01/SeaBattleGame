@@ -5,10 +5,10 @@
 #include "Windows.h"
 
 bool shootTrying(char (*p)[PLAYGROUND_SIZE], COORD position);
-bool playerShoot(char (*p)[PLAYGROUND_SIZE], COORD& position);
+int playerShoot(char (*p)[PLAYGROUND_SIZE], COORD& position);
 int isGameOver(char (*player)[PLAYGROUND_SIZE], char (*pc)[PLAYGROUND_SIZE]);
-bool pcShoot(char (*p)[PLAYGROUND_SIZE], COORD* variations, int &varSize, notDestroyedShip& nds);
+int pcShoot(char (*p)[PLAYGROUND_SIZE], COORD* variations, int &varSize, notDestroyedShip& nds);
 bool isShipDestroyed(COORD position, char (*p)[PLAYGROUND_SIZE], int who);
 void markAroundAsEmpty(int shipSize, bool orientation, COORD ship[MAX_SIZE_OF_SHIP], char (*p)[PLAYGROUND_SIZE], int who);
-void resultOfMove(bool result, COORD position, int who, char (*p)[PLAYGROUND_SIZE]);
+bool resultOfMove(bool result, COORD position, int who, char (*p)[PLAYGROUND_SIZE]);
 bool strategyPC(COORD position, bool result, bool shipStatus, char (*p)[PLAYGROUND_SIZE], notDestroyedShip& nds);
