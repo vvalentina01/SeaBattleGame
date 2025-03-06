@@ -3,3 +3,5 @@ seaBattleGame/seaBattleGame/
 seaBattleGame/*.vcxproj.*
 seaBattleGame/.vs/
 *test.*
+.vs/seaBattleGame/v17
+.vs/VSWorkspaceState.json
