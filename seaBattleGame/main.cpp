@@ -14,40 +14,15 @@
 #include "Windows.h"
 
 char startMenu() {
+	setCursor({ 0,0 });
 	printf("***** Welcome to Sea Battle *****\n");
 	printf("\t* - New Game\n");
 	printf("\t* - Continue Last Game\n");
 	printf("\n");
 	printf("use W and S to move\n");
 	printf("use ENTER to choose\n");
-	char isNewGame = -1;
-	COORD position = { 8, 1 };
-	setCursor(position);
-	do {
-		isNewGame = _getch();
-		switch (isNewGame) {
-		case 'w':
-		case 'W':
-			if (position.Y > 1)
-				--position.Y;
-			setCursor(position);
-			isNewGame = -1;
-			break;
-		case 's':
-		case 'S':
-			if (position.Y < 2)
-				++position.Y;
-			setCursor(position);
-			isNewGame = -1;
-			break;
-		case ENTER:    
-			isNewGame = position.Y + '0';
-			break;
-		default:
-			isNewGame = -1;
-		}
-	} while (isNewGame == -1);
-	return isNewGame;
+	return menuCursor({ 8, 1 });
+}
 }
 
 void cleanScreen(int n)
