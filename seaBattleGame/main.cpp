@@ -14,40 +14,25 @@
 #include "Windows.h"
 
 char startMenu() {
+	setCursor({ 0,0 });
 	printf("***** Welcome to Sea Battle *****\n");
 	printf("\t* - New Game\n");
 	printf("\t* - Continue Last Game\n");
 	printf("\n");
 	printf("use W and S to move\n");
 	printf("use ENTER to choose\n");
-	char isNewGame = -1;
-	COORD position = { 8, 1 };
-	setCursor(position);
-	do {
-		isNewGame = _getch();
-		switch (isNewGame) {
-		case 'w':
-		case 'W':
-			if (position.Y > 1)
-				--position.Y;
-			setCursor(position);
-			isNewGame = -1;
-			break;
-		case 's':
-		case 'S':
-			if (position.Y < 2)
-				++position.Y;
-			setCursor(position);
-			isNewGame = -1;
-			break;
-		case ENTER:    
-			isNewGame = position.Y + '0';
-			break;
-		default:
-			isNewGame = -1;
-		}
-	} while (isNewGame == -1);
-	return isNewGame;
+	return menuCursor({ 8, 1 });
+}
+
+char saveGame() {
+	setCursor({ 0,0 });
+	printf("***** Do you want to save the game? *****\n");
+	printf("\t* - yes\n");
+	printf("\t* - no\n");
+	printf("\n");
+	printf("use W and S to move\n");
+	printf("use ENTER to choose\n");
+	return menuCursor({ 8, 1 });
 }
 
 void cleanScreen(int n)
@@ -115,30 +100,51 @@ int main()
 		setCursor({ 0, 2 });
 		printf("PLAYER MOVE");
 
-		bool playerMove = true;
-		while (playerMove) {
+		int playerMove = CONTINUE_GAME;
+		while (playerMove == CONTINUE_GAME) {
 			playerMove = playerShoot(pcPlayground, currentPosition);
-			for (int i = 3; i < 7; ++i) {
+			for (int i = 3; i < HEADER_Y; ++i) {
 				setCursor({ 0, (short)i });
 				printf(EMPTY_STRING);
 			}
 		}
+		if (playerMove == STOP_GAME)
+			break;
 		gameStatus = isGameOver(playerPlayground, pcPlayground);
 		if (gameStatus == NOT_OVER) {
 			setCursor({ 0, 2 });
 			printf(EMPTY_STRING);
 			setCursor({ 0, 2 });
 			printf("PC MOVE");
-			bool pcMove = true;
-			while (pcMove) {
+			int pcMove = CONTINUE_GAME;
+			while (pcMove == CONTINUE_GAME) {
 				pcMove = pcShoot(playerPlayground, variations, varSize, nds);
-				for (int i = 3; i < 7; ++i) {
+				for (int i = 3; i < HEADER_Y; ++i) {
 					setCursor({ 0, (short)i });
 					printf(EMPTY_STRING);
 				}
 			}
 			gameStatus = isGameOver(playerPlayground, pcPlayground);
+			if (pcMove == STOP_GAME)
+				break;
 		}
 		++roundCounter;
 	}
+
+	if (gameStatus) {
+		cleanScreen(30);
+		char s = saveGame();
+		cleanScreen(30);
+		setCursor({ 0,0 });
+		if ( s == SAVE) {
+			
+			if (savePlayground(playerPlayground, PLAYER) && savePlayground(pcPlayground, PC))
+				printf("Game is saved!\n");
+			else
+				printf("Error!\n");
+		}
+	}
+	printf("\tto exit press any key... ");
+	_getch();
+	cleanScreen(30);
 }

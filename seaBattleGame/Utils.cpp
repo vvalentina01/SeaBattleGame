@@ -169,3 +169,33 @@ void printColorSymbol(char symbol)
 	printf("%c", symbol);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), CLASSIC);
 }
+
+char menuCursor(COORD position) {
+	char c;
+	setCursor(position);
+	do {
+		c = _getch();
+		switch (c) {
+		case 'w':
+		case 'W':
+			if (position.Y > 1)
+				--position.Y;
+			setCursor(position);
+			c = -1;
+			break;
+		case 's':
+		case 'S':
+			if (position.Y < 2)
+				++position.Y;
+			setCursor(position);
+			c = -1;
+			break;
+		case ENTER:
+			c = position.Y + '0';
+			break;
+		default:
+			c = -1;
+		}
+	} while (c == -1);
+	return c;
+}

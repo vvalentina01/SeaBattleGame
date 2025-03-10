@@ -19,8 +19,8 @@ const char DELETE_SYMBOL[] = "\b  ";
 const short HEADER_Y = 12;
 const short PLAYER_X = 30;
 
-const char PATH_PLAYER[] = "C:/study/projects/seaBattle 2.0/save/player.txt";
-const char PATH_PC[] = "C:/study/projects/seaBattle 2.0/save/pc.txt";
+const char PATH_PLAYER[] = "save/player.txt";
+const char PATH_PC[] = "save/pc.txt";
 const char HEADER_PLAYER[] = "  PLAYER  ";
 const char HEADER_PC[] = "   ENEMY   ";
 const char EMPTY_STRING[] = "                                                    ";
@@ -28,6 +28,7 @@ const int BORDERS = 2;
 
 const char NEW_GAME = '1';
 const char CONTINUE_LAST_GAME = '2';
+const char SAVE = '1';
 
 const int WIN = 1;
 const int LOSE = 0;
@@ -48,6 +49,8 @@ const int ENTER = 13;
 const int SPACE = 32;
 const int BACKSPACE = 8;
 const int ESCAPE = 27;
+
+const int STOP_GAME = -1;
 
 struct notDestroyedShip {
 	bool exists;

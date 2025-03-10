@@ -7,3 +7,4 @@ bool loadPlayground(char (*p)[PLAYGROUND_SIZE], int who);
 void setCursor(COORD position);
 char inputCoordinates(COORD* position, int who);
 void printColorSymbol(char symbol);
+char menuCursor(COORD position);
