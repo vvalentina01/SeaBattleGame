@@ -51,6 +51,36 @@ void gameIsFailed() {
 	printf(OUT_OF_MEMORY);
 }
 
+void printResults(int gameStatus, char (*player)[PLAYGROUND_SIZE], char (*pc)[PLAYGROUND_SIZE]) {
+	switch (gameStatus) {
+	case NOT_OVER:
+	{
+		cleanScreen(SCREEN_SIZE);
+		char s = saveGame();
+		cleanScreen(SCREEN_SIZE);
+		setCursor({ 0,0 });
+		if (s == SAVE) {
+
+			if (savePlayground(player, PLAYER) && savePlayground(pc, PC))
+				printf("Game is saved!\n");
+			else
+				printf("Error!\n");
+		}
+		break;
+	}
+	case WIN:
+		cleanScreen(HEADER_Y);
+		setCursor({ 0,0 });
+		printf("Congratulations! You win!\n");
+		break;
+	case LOSE:
+		cleanScreen(HEADER_Y);
+		setCursor({ 0,0 });
+		printf("Oh no! You lose! Maybe you'll win next time?\n");
+		break;
+	}
+}
+
 int main()
 {
 	system(BLACK_TEXT_ON_WHITE_BACKGROUND);
@@ -150,20 +180,7 @@ int main()
 		}
 		++roundCounter;
 	}
-
-	if (gameStatus == NOT_OVER) {
-		cleanScreen(SCREEN_SIZE);
-		char s = saveGame();
-		cleanScreen(SCREEN_SIZE);
-		setCursor({ 0,0 });
-		if ( s == SAVE) {
-			
-			if (savePlayground(playerPlayground, PLAYER) && savePlayground(pcPlayground, PC))
-				printf("Game is saved!\n");
-			else
-				printf("Error!\n");
-		}
-	}
+	printResults(gameStatus, playerPlayground, pcPlayground);
 	printf("\tto exit press any key... ");
 	_getch();
 	cleanScreen(30);
