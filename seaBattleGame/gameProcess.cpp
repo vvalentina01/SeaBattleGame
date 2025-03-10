@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include "Windows.h"
 
+
 bool shootTrying(char (*p)[PLAYGROUND_SIZE], COORD position)
 {
 	if (p[position.Y][position.X] == PART_OF_SHIP) {
@@ -77,8 +78,8 @@ bool pcShoot(char (*p)[PLAYGROUND_SIZE], COORD* variations, int& varSize, notDes
 				else
 					r = rand() % varSize;
 				position = variations[r];
-			} while (p[position.Y][position.X] == MISS);
-			variations[r] = variations[varSize];
+			} while (p[position.Y][position.X] == MISS || p[position.Y][position.X] == HIT);
+			variations[r] = variations[varSize - 1];
 			--varSize;
 		}
 
@@ -275,7 +276,7 @@ bool strategyPC(COORD position, bool result, bool shipStatus, char (*p)[PLAYGROU
 		else
 			do
 				nds.nextMove = nds.variations[rand() % nds.varCount];
-			while (p[nds.nextMove.X][nds.nextMove.Y] == MISS);
+			while (p[nds.nextMove.Y][nds.nextMove.X] == MISS || p[nds.nextMove.Y][nds.nextMove.X] == HIT);
 		return true;
 	}
 
@@ -316,7 +317,7 @@ bool strategyPC(COORD position, bool result, bool shipStatus, char (*p)[PLAYGROU
 			}
 			do 
 				nds.nextMove = nds.variations[rand() % nds.varCount];
-			while (p[nds.nextMove.Y][nds.nextMove.X] == MISS || p[nds.nextMove.X][nds.nextMove.Y] == HIT);
+			while (p[nds.nextMove.Y][nds.nextMove.X] == MISS || p[nds.nextMove.Y][nds.nextMove.X] == HIT);
 		}
 		else {
 			if (nds.ship[0].Y == nds.ship[1].Y)

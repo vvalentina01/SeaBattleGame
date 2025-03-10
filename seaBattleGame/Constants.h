@@ -46,7 +46,8 @@ const char BLACK_TEXT_ON_WHITE_BACKGROUND[] = "Color 70";
 
 const int ENTER = 13;
 const int SPACE = 32;
-const int BACKSPACE = 13;
+const int BACKSPACE = 8;
+const int ESCAPE = 27;
 
 struct notDestroyedShip {
 	bool exists;
