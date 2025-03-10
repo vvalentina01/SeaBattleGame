@@ -151,10 +151,10 @@ int main()
 		++roundCounter;
 	}
 
-	if (gameStatus) {
-		cleanScreen(30);
+	if (gameStatus == NOT_OVER) {
+		cleanScreen(SCREEN_SIZE);
 		char s = saveGame();
-		cleanScreen(30);
+		cleanScreen(SCREEN_SIZE);
 		setCursor({ 0,0 });
 		if ( s == SAVE) {
 			
