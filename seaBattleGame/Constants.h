@@ -31,6 +31,7 @@ const int BORDERS = 2;
 
 const char NEW_GAME = '1';
 const char CONTINUE_LAST_GAME = '2';
+const char EXIT = '3';
 const char SAVE = '1';
 
 const int WIN = 1;
