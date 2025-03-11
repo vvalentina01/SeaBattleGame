@@ -47,6 +47,7 @@ const int RED_ON_WHITE = 4 + 7 * 16;
 const int GREEN_ON_WHITE = 2 + 7 * 16;
 const int CLASSIC = 7 * 16;
 const int LIGHT_YELLOW = 6 + 6 * 16;
+const int YELLOW_ON_WHITE = 6 + 7 * 16;
 const char BLACK_TEXT_ON_WHITE_BACKGROUND[] = "Color 70";
 
 const int ENTER = 13;

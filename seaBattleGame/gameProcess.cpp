@@ -257,14 +257,21 @@ bool resultOfMove(bool result, COORD position, int who, char (*p)[PLAYGROUND_SIZ
 	printf("shoots to %c%d\n", ALPHABET_HEADER[position.X], NUMERIC_HEADER[position.Y]);
 	printf("Result: ");
 	if (result) {
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED_ON_WHITE);
 		printf("hit\n");
-		if (isShipDestroyed(position, p, who))
+		if (isShipDestroyed(position, p, who)) {
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), GREEN_ON_WHITE);
 			printf("Ship is destroyed!\n");
-		else
+		}
+		else 
 			printf("Ship is not destroyed yet!\n");
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), CLASSIC);
 	}
-	else
+	else {
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW_ON_WHITE);
 		printf("miss\n");
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), CLASSIC);
+	}
 	printf("\tto exit game press ESC...\n");
 	printf("\tto continue press any key... ");
 	if (_getch() == ESCAPE)
