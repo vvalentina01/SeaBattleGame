@@ -135,7 +135,6 @@ int inputNewShip(COORD (*ship)[MAX_SIZE_OF_SHIP], COORD &position)
 			printColorSymbol(EMPTY_SPACE);
 			(*ship)[i].X = position.X - PLAYER_X - BORDERS;
 			(*ship)[i].Y = position.Y - HEADER_Y - BORDERS;
-			break;
 		}
 	}
 	return i;

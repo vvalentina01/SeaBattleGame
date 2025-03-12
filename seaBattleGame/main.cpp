@@ -14,6 +14,7 @@
 #include "Windows.h"
 
 char startMenu() {
+	cleanScreen(SCREEN_SIZE);
 	setCursor({ 0,0 });
 	printf("***** Welcome to Sea Battle *****\n");
 	printf("\t* - New Game\n");
@@ -34,22 +35,6 @@ char saveGame() {
 	printf("use W and S to move\n");
 	printf("use ENTER to choose\n");
 	return menuCursor({ 8, 1 });
-}
-
-void cleanScreen(int n)
-{
-	for (int i = 0; i < n; ++i)
-	{
-		setCursor({ 0, (short)i });
-		printf(EMPTY_STRING);
-	}
-}
-
-void gameIsFailed() {
-	cleanScreen(SCREEN_SIZE);
-	setCursor({ 0, 0 });
-	printf(ERROR_MESSAGE);
-	printf(OUT_OF_MEMORY);
 }
 
 void printResults(int gameStatus, char (*player)[PLAYGROUND_SIZE], char (*pc)[PLAYGROUND_SIZE]) {
@@ -117,17 +102,23 @@ int main()
 		}
 
 		if (isNewGame == CONTINUE_LAST_GAME) {
-			if (!loadPlayground(playerPlayground, PLAYER))
-				gameIsFailed;
-			if (!loadPlayground(pcPlayground, PC))
-				gameIsFailed;
+			int loadingResult = loadPlayground(playerPlayground, PLAYER);
+			if (loadingResult != SUCCESS_LOAD) {
+				gameIsFailed(loadingResult);
+				continue;
+			}
+			loadingResult = loadPlayground(pcPlayground, PC);
+			if (loadingResult != SUCCESS_LOAD) {
+				gameIsFailed(loadingResult);
+				continue;
+			}
 		}
 
 		cleanScreen(SCREEN_SIZE);
-		if (!printPlayground(pcPlayground, PC))
-			gameIsFailed;
-		if (!printPlayground(playerPlayground, PLAYER))
-			gameIsFailed;
+		if (!printPlayground(pcPlayground, PC) || !printPlayground(playerPlayground, PLAYER)) {
+			gameIsFailed(OUT_OF_MEMORY);
+			continue;
+		}
 
 		setCursor({ 0, 0 });
 		printf("\tGame is started\t");
@@ -137,11 +128,8 @@ int main()
 		int varSize = PLAYGROUND_SIZE * PLAYGROUND_SIZE;
 		COORD* variations = (COORD*)malloc(varSize * sizeof(COORD));
 		if (variations == NULL) {
-			cleanScreen(SCREEN_SIZE);
-			setCursor({ 0, 0 });
-			printf(ERROR_MESSAGE);
-			printf(OUT_OF_MEMORY);
-			return 0;
+			gameIsFailed(OUT_OF_MEMORY);
+			continue;
 		}
 		notDestroyedShip nds{};
 		COORD currentPosition = { 2, HEADER_Y + 2 };
@@ -190,6 +178,8 @@ int main()
 			++roundCounter;
 		}
 		printResults(gameStatus, playerPlayground, pcPlayground);
+		if (gameStatus != NOT_OVER)
+			cleanSavingFiles();
 		printf("\tpress any key... ");
 		_getch();
 		cleanScreen(30);

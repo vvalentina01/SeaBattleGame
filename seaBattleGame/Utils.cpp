@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include "Windows.h"
 
-bool loadPlayground(char (*p)[PLAYGROUND_SIZE], int who)
+int loadPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 {
 	FILE* f;
 	if (who == PLAYER)
@@ -19,7 +19,12 @@ bool loadPlayground(char (*p)[PLAYGROUND_SIZE], int who)
 		f = fopen(PATH_PC, "r");
 
 	if (f == NULL)
-		return false;
+		return OUT_OF_MEMORY;
+
+	char c;
+	fscanf(f, "%c", &c);
+	if (c == '0')
+		return SAVE_DOES_NOT_EXIST;
 
 	for (int i = 0; i < PLAYGROUND_SIZE; ++i)
 	{
@@ -203,4 +208,36 @@ char menuCursor(COORD position) {
 		}
 	} while (c == -1);
 	return c;
+}
+
+bool cleanSavingFiles() {
+	FILE* fp = fopen(PATH_PLAYER, "wt");
+	FILE* fpc = fopen(PATH_PC, "wt");
+	if (fp == NULL || fpc == NULL)
+		return false;
+	fprintf(fp, "0");
+	fprintf(fpc, "0");
+	fclose(fp);
+	fclose(fpc);
+	return true;
+}
+
+void cleanScreen(int n)
+{
+	for (int i = 0; i < n; ++i)
+	{
+		setCursor({ 0, (short)i });
+		printf(EMPTY_STRING);
+	}
+}
+
+void gameIsFailed(int errorType) {
+	cleanScreen(SCREEN_SIZE);
+	setCursor({ 0, 0 });
+	if (errorType == OUT_OF_MEMORY)
+		printf(OUT_OF_MEMORY_MESSAGE);
+	if (errorType == SAVE_DOES_NOT_EXIST)
+		printf(LOADING_ERROR_MESSAGE);
+	printf(PAUSE);
+	_getch();
 }

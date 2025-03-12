@@ -25,8 +25,9 @@ const char PATH_PC[] = "save/pc.txt";
 const char HEADER_PLAYER[] = "  PLAYER  ";
 const char HEADER_PC[] = "   ENEMY   ";
 const char EMPTY_STRING[] = "                                                    ";
-const char ERROR_MESSAGE[] = "Sorry! The Game finished with ERROR";
-const char OUT_OF_MEMORY[] = "OUT OF MEMORY";
+const char LOADING_ERROR_MESSAGE[] = "Last game is finished. Please start a new game!";
+const char OUT_OF_MEMORY_MESSAGE[] = "Sorry! The Game finished with ERROR: OUT OF MEMORY";
+const char PAUSE[] = "\n\tto continue press any key... ";
 const int BORDERS = 2;
 
 const char NEW_GAME = '1';
@@ -57,6 +58,10 @@ const int ESCAPE = 27;
 
 const int CONTINUE_GAME = 1;
 const int STOP_GAME = -1;
+
+const int SAVE_DOES_NOT_EXIST = -1;
+const int OUT_OF_MEMORY = 0;
+const int SUCCESS_LOAD = 1;
 
 struct notDestroyedShip {
 	bool exists;
