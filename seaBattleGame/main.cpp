@@ -147,16 +147,17 @@ int main()
 			int playerMove = CONTINUE_GAME;
 			while (playerMove == CONTINUE_GAME) {
 				playerMove = playerShoot(pcPlayground, currentPosition);
-				for (int i = 3; i < HEADER_Y; ++i) {
+				for (int i = 3; i < HEADER_Y - 2; ++i) {
 					setCursor({ 0, (short)i });
 					printf(EMPTY_STRING);
 				}
+				gameStatus = isGameOver(playerPlayground, pcPlayground);
+				if (gameStatus != NOT_OVER)
+					break;
 			}
 			if (playerMove == STOP_GAME)
 				break;
-			gameStatus = isGameOver(playerPlayground, pcPlayground);
-			if (playerMove == STOP_GAME)
-				break;
+
 			if (gameStatus == NOT_OVER) {
 				setCursor({ 0, 2 });
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED_ON_WHITE);
@@ -166,12 +167,14 @@ int main()
 				int pcMove = CONTINUE_GAME;
 				while (pcMove == CONTINUE_GAME) {
 					pcMove = pcShoot(playerPlayground, variations, varSize, nds);
-					for (int i = 3; i < HEADER_Y; ++i) {
+					for (int i = 3; i < HEADER_Y - 2; ++i) {
 						setCursor({ 0, (short)i });
 						printf(EMPTY_STRING);
 					}
+					gameStatus = isGameOver(playerPlayground, pcPlayground);
+					if (gameStatus != NOT_OVER)
+						break;
 				}
-				gameStatus = isGameOver(playerPlayground, pcPlayground);
 				if (pcMove == STOP_GAME)
 					break;
 			}

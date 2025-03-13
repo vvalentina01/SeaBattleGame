@@ -134,13 +134,13 @@ bool isShipDestroyed(COORD position, char (*p)[PLAYGROUND_SIZE], int who) {
 
 	if (!onlyOne) {
 		if (orientation == HORIZONTAL) {
-			for (int i = 1; position.X + 1 < PLAYGROUND_SIZE && shipSize < MAX_SIZE_OF_SHIP &&
+			for (int i = 1; position.X + i < PLAYGROUND_SIZE && shipSize < MAX_SIZE_OF_SHIP &&
 				p[position.Y][position.X + i] != EMPTY_SPACE && p[position.Y][position.X + i] != MISS; i++)
 			{
 				ship[shipSize] = { (short)(position.X + i), position.Y };
 				++shipSize;
 			}
-			for (int i = 1; position.X > 0 && shipSize < MAX_SIZE_OF_SHIP &&
+			for (int i = 1; position.X - i >= 0 && shipSize < MAX_SIZE_OF_SHIP &&
 				p[position.Y][position.X - i] != EMPTY_SPACE && p[position.Y][position.X - i] != MISS; i++)
 			{
 				ship[shipSize] = { (short)(position.X - i), position.Y };
@@ -149,13 +149,13 @@ bool isShipDestroyed(COORD position, char (*p)[PLAYGROUND_SIZE], int who) {
 		}
 		if (orientation == VERTICAL) {
 
-			for (int i = 1; position.Y + 1 < PLAYGROUND_SIZE && shipSize < MAX_SIZE_OF_SHIP &&
+			for (int i = 1; position.Y + i < PLAYGROUND_SIZE && shipSize < MAX_SIZE_OF_SHIP &&
 				p[position.Y + i][position.X] != EMPTY_SPACE && p[position.Y + i][position.X] != MISS; i++)
 			{
 				ship[shipSize] = { position.X, (short)(position.Y + i) };
 				++shipSize;
 			}
-			for (int i = 1; position.Y > 0 && shipSize < MAX_SIZE_OF_SHIP &&
+			for (int i = 1; position.Y - i >= 0 && shipSize < MAX_SIZE_OF_SHIP &&
 				p[position.Y - i][position.X] != EMPTY_SPACE && p[position.Y - i][position.X] != MISS; i++)
 			{
 				ship[shipSize] = { position.X, (short)(position.Y - i) };
@@ -320,7 +320,7 @@ bool strategyPC(COORD position, bool result, bool shipStatus, char (*p)[PLAYGROU
 		if (!nds.exists) {
 			nds.exists = true;
 			nds.varCount = 0;
-			if (position.Y + 1 <= PLAYGROUND_SIZE) {
+			if (position.Y + 1 < PLAYGROUND_SIZE) {
 				nds.variations[nds.varCount] = { position.X, (short)(position.Y + 1) };
 				++nds.varCount;
 			}
@@ -328,7 +328,7 @@ bool strategyPC(COORD position, bool result, bool shipStatus, char (*p)[PLAYGROU
 				nds.variations[nds.varCount] = { position.X, (short)(position.Y - 1) };
 				++nds.varCount;
 			}
-			if (position.X + 1 <= PLAYGROUND_SIZE) {
+			if (position.X + 1 < PLAYGROUND_SIZE) {
 				nds.variations[nds.varCount] = { (short)(position.X + 1), position.Y };
 				++nds.varCount;
 			}
@@ -356,7 +356,7 @@ bool strategyPC(COORD position, bool result, bool shipStatus, char (*p)[PLAYGROU
 					nds.variations[nds.varCount] = { (short)(nds.ship[first].X - 1), nds.ship[first].Y };
 					++nds.varCount;
 				}
-				if (nds.ship[last].X + 1 <= PLAYGROUND_SIZE && p[nds.ship[last].Y][nds.ship[last].X + 1] != HIT
+				if (nds.ship[last].X + 1 < PLAYGROUND_SIZE && p[nds.ship[last].Y][nds.ship[last].X + 1] != HIT
 						&& p[nds.ship[last].Y][nds.ship[last].X + 1] != MISS) {
 					nds.variations[nds.varCount] = { (short)(nds.ship[last].X + 1), nds.ship[last].Y };
 					++nds.varCount;
@@ -368,7 +368,7 @@ bool strategyPC(COORD position, bool result, bool shipStatus, char (*p)[PLAYGROU
 					nds.variations[nds.varCount] = { nds.ship[first].X, (short)(nds.ship[first].Y - 1) };
 					++nds.varCount;
 				}
-				if (nds.ship[last].Y + 1 <= PLAYGROUND_SIZE && p[nds.ship[last].Y + 1][nds.ship[last].X] != HIT
+				if (nds.ship[last].Y + 1 < PLAYGROUND_SIZE && p[nds.ship[last].Y + 1][nds.ship[last].X] != HIT
 						&& p[nds.ship[last].Y + 1][nds.ship[last].X] != MISS) {
 					nds.variations[nds.varCount] = { nds.ship[last].X, (short)(nds.ship[last].Y + 1) };
 					++nds.varCount;
