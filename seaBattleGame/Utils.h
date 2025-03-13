@@ -11,3 +11,4 @@ char menuCursor(COORD position);
 bool cleanSavingFiles();
 void cleanScreen(int n);
 void gameIsFailed(int errorType);
+void printColorString(const char* str, int color);

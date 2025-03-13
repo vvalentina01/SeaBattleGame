@@ -193,14 +193,14 @@ void createPlayerPlayground(char (*p)[PLAYGROUND_SIZE])
 			setCursor({ 0, 0 });
 			printf(EMPTY_STRING);
 			setCursor({ 0, 0 });
-			printf("Ship (type-%d) was added!", n);
+			printColorString("Ship was added!", GREEN_ON_WHITE);
 			printInstructions(n - 1, countOfEveryShipTypes[n - 1]);
 		}
 		else {
 			setCursor({ 0, 0 });
 			printf(EMPTY_STRING);
 			setCursor({ 0, 0 });
-			printf("Uncorrect!                ");
+			printColorString("Uncorrect!", RED_ON_WHITE);
 			for (int j = 0; j < n; ++j)
 			{
 				setCursor({ short(ship[j].X + PLAYER_X + BORDERS), short(ship[j].Y + HEADER_Y + BORDERS) });
