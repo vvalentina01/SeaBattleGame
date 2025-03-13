@@ -153,6 +153,7 @@ int main()
 			setCursor({ 0, 1 });
 			printf("Round %d: ", roundCounter);
 			setCursor({ 0, 2 });
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), GREEN_ON_WHITE);
 			printf("PLAYER MOVE");
 
 			int playerMove = CONTINUE_GAME;
@@ -170,6 +171,7 @@ int main()
 				break;
 			if (gameStatus == NOT_OVER) {
 				setCursor({ 0, 2 });
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED_ON_WHITE);
 				printf(EMPTY_STRING);
 				setCursor({ 0, 2 });
 				printf("PC MOVE");
