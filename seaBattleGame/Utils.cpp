@@ -190,7 +190,7 @@ char menuCursor(COORD position) {
 			break;
 		case 's':
 		case 'S':
-			if (position.Y < 2)
+			if (position.Y < 3)
 				++position.Y;
 			setCursor(position);
 			c = -1;
