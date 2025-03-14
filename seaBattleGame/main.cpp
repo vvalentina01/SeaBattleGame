@@ -141,9 +141,7 @@ int main()
 			setCursor({ 0, 1 });
 			printf("Round %d: ", roundCounter);
 			setCursor({ 0, 2 });
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), GREEN_ON_WHITE);
-			printf("PLAYER MOVE");
-
+			printColorString("PLAYER MOVE", GREEN_ON_WHITE);
 			int playerMove = CONTINUE_GAME;
 			while (playerMove == CONTINUE_GAME) {
 				playerMove = playerShoot(pcPlayground, currentPosition);
@@ -160,10 +158,9 @@ int main()
 
 			if (gameStatus == NOT_OVER) {
 				setCursor({ 0, 2 });
-				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED_ON_WHITE);
 				printf(EMPTY_STRING);
 				setCursor({ 0, 2 });
-				printf("PC MOVE");
+				printColorString("PC MOVE", RED_ON_WHITE);
 				int pcMove = CONTINUE_GAME;
 				while (pcMove == CONTINUE_GAME) {
 					pcMove = pcShoot(playerPlayground, variations, varSize, nds);

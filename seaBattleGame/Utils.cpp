@@ -180,6 +180,12 @@ void printColorSymbol(char symbol)
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), CLASSIC);
 }
 
+void printColorString(const char* str, int color) {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+	printf(str);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), CLASSIC);
+}
+
 char menuCursor(COORD position) {
 	char c;
 	setCursor(position);
