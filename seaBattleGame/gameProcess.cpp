@@ -273,7 +273,7 @@ bool resultOfMove(bool result, COORD position, int who, char (*p)[PLAYGROUND_SIZ
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), CLASSIC);
 	}
 	printf("\tto exit game press ESC...\n");
-	printf("\tto continue press any key... ");
+	printf(PAUSE);
 	if (_getch() == ESCAPE)
 		return false;
 	return true;
